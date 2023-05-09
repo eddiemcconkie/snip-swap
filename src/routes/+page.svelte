@@ -1,2 +1,13 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+  import { resize } from '$lib/helpers/image.js';
+
+  export let data;
+</script>
+
+<a href="/signin">Sign in</a>
+<a href="/signout">Sign out</a>
+{#if data.user}
+  {@const displayName = data.user.name ?? data.user.username}
+  <p>User: {displayName}</p>
+  <img src={resize(data.user.avatar, 300)} alt={displayName} />
+{/if}

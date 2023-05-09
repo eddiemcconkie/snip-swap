@@ -5,15 +5,20 @@
 declare global {
   namespace App {
     // interface Error {}
-    // interface Locals {}
+    interface Locals {
+      auth: import('lucia-auth').AuthRequest;
+      surrealToken: string;
+    }
     // interface PageData {}
     // interface Platform {}
-    /// <reference types="lucia-auth" />
   }
   declare namespace Lucia {
     type Auth = import('$lib/server/lucia').Auth;
     type UserAttributes = {
-      role: 'user' | 'admin';
+      username: string;
+      name: string;
+      avatar: string;
+      joined?: string;
     };
   }
 }

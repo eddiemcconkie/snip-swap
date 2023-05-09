@@ -11,28 +11,34 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check .",
-    "format": "prettier --plugin-search-dir . --write ."
+    "format": "prettier --plugin-search-dir . --write .",
+    "db:import-all": "node ./db/import . -r",
+    "db:import": "node ./db/import"
   },
   "devDependencies": {
-    "@playwright/test": "^1.32.3",
-    "@sveltejs/adapter-auto": "^2.0.0",
-    "@sveltejs/kit": "^1.15.7",
-    "@unocss/preset-icons": "^0.51.6",
-    "@unocss/preset-tagify": "^0.51.6",
-    "prettier": "^2.8.7",
+    "@iconify-json/heroicons": "^1.1.10",
+    "@playwright/test": "^1.33.0",
+    "@sveltejs/adapter-auto": "^2.0.1",
+    "@sveltejs/kit": "^1.16.3",
+    "@unocss/preset-icons": "^0.51.12",
+    "@unocss/preset-tagify": "^0.51.12",
+    "@vavite/node-loader": "^1.7.1",
+    "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.0",
-    "svelte": "^3.58.0",
-    "svelte-check": "^3.2.0",
+    "svelte": "^3.59.1",
+    "svelte-check": "^3.3.2",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
-    "unocss": "^0.51.6",
-    "vite": "^4.3.1",
+    "unocss": "^0.51.12",
+    "vite": "^4.3.5",
     "vitest": "^0.30.1"
   },
   "type": "module",
   "dependencies": {
-    "@lucia-auth/oauth": "^1.0.0",
-    "@unocss/extractor-svelte": "^0.51.6",
-    "lucia-auth": "^1.3.0"
+    "@lucia-auth/oauth": "^1.0.1",
+    "@unocss/extractor-svelte": "^0.51.12",
+    "dotenv": "^16.0.3",
+    "lucia-auth": "^1.5.0",
+    "zod": "^3.21.4"
   }
 }
