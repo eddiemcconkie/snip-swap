@@ -3,7 +3,7 @@ import { keySchema, sessionSchema, userSchema, type UserSchema } from '$lib/sche
 import { addTable } from '$lib/schema/id';
 import type { Adapter, LuciaErrorConstructor } from 'lucia-auth';
 import { z } from 'zod';
-import { connectRoot } from './db/surreal';
+import { connectRoot } from '../db/surreal.server';
 
 export const surrealdb =
   () =>

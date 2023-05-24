@@ -39,6 +39,7 @@
     "@unocss/extractor-svelte": "^0.51.12",
     "dotenv": "^16.0.3",
     "lucia-auth": "^1.5.0",
+    "sveltekit-superforms": "^0.8.6",
     "zod": "^3.21.4"
   }
 }

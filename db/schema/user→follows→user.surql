@@ -1,0 +1,19 @@
+DEFINE TABLE follows SCHEMAFULL
+  PERMISSIONS
+    FOR select
+      FULL
+    FOR create
+      WHERE $scope = 'user'
+    FOR update, delete
+      WHERE in = $auth
+;
+
+DEFINE FIELD in ON follows
+  TYPE record(auth_user)
+  -- ASSERT $scope = NONE OR $value = $auth
+;
+DEFINE FIELD out ON follows
+  TYPE record(auth_user)
+  -- ASSERT $value != $auth
+;
+  

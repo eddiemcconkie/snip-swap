@@ -1,22 +1,22 @@
 import { z } from 'zod';
-import { idWithoutTable } from './id';
+import { record } from './id';
 
 export const userSchema = z.object({
-  id: idWithoutTable(),
+  id: record(),
   username: z.string(),
   name: z.string(),
   avatar: z.string(),
   joined: z.string().datetime(),
 });
 export const sessionSchema = z.object({
-  id: idWithoutTable(),
-  user_id: idWithoutTable(),
+  id: record(),
+  user_id: record(),
   active_expires: z.number(),
   idle_expires: z.number(),
 });
 export const keySchema = z.object({
-  id: idWithoutTable(),
-  user_id: idWithoutTable(),
+  id: record(),
+  user_id: record(),
   primary_key: z.boolean(),
   hashed_password: z.string().nullable(),
   expires: z.number().nullable(),

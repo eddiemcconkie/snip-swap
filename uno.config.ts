@@ -19,12 +19,12 @@ export default defineConfig({
       scale: 0.8,
       extraProperties: {
         display: 'inline-block',
-        'vertical-align': 'middle',
+        // 'vertical-align': 'middle',
       },
     }),
     presetTagify(),
   ],
-  extractors: [extractorSvelte],
+  extractors: [extractorSvelte()],
   rules: [
     // Margin
     [
@@ -66,7 +66,7 @@ export default defineConfig({
     [/^gap-(.+)$/, ([_, space]) => ({ gap: `var(--space-${space})` })],
 
     // Color
-    [/^color-(.+)$/, ([_, color]) => ({ color: `var(--color-${color})` })],
-    [/^bg-(.+)$/, ([_, color]) => ({ 'background-color': `var(--color-${color})` })],
+    [/^color-(.+)$/, ([_, color]) => ({ color: `var(--${color})` })],
+    [/^bg-(.+)$/, ([_, color]) => ({ 'background-color': `var(--${color})` })],
   ],
 });

@@ -1,0 +1,32 @@
+/* Dark theme (default) */
+:root {
+  /* Primary */
+  --primary-0: var(--purple-4);
+  --primary-1: var(--purple-5);
+  --primary-2: var(--purple-6);
+  --on-primary: var(--light-0);
+  --primary-highlight: var(--purple-2);
+  --on-primary-highlight: var(--dark-5);
+  /* Accent */
+  --accent-0: var(--green-2);
+  --accent-1: var(--green-3);
+  --accent-2: var(--green-4);
+  --on-accent: var(--dark-5);
+  --accent-highlight: var(--green-1);
+  --on-accent-highlight: var(--dark-5);
+  /* Surface */
+  --surface-0: var(--dark-2);
+  --surface-1: var(--dark-4);
+  --surface-2: var(--dark-6);
+  --surface-3: var(--dark-8);
+  --on-surface: var(--light-0);
+  --surface-highlight: var(--dark-0);
+  --on-surface-highlight: var(--light-0);
+  /* Links */
+  --link: var(--purple-3);
+  --link-hover: var(--purple-1);
+}
+
+/* Light theme */
+/* :root[theme='light'] {
+} */

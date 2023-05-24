@@ -9,7 +9,9 @@ declare global {
       auth: import('lucia-auth').AuthRequest;
       surrealToken: string;
     }
-    // interface PageData {}
+    interface PageData {
+      user: import('lucia-auth').User | null;
+    }
     // interface Platform {}
   }
   declare namespace Lucia {

@@ -1,0 +1,47 @@
+/* Colors generated with https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors */
+:root {
+  /* Purple - based on #3c57dd */
+  --purple-0: #e9ebfb;
+  --purple-1: #c8cdf5;
+  --purple-2: #a3adef;
+  --purple-3: #7c8ce9;
+  --purple-4: #5d71e3;
+  --purple-5: #3c57dd;
+  --purple-6: #364ed2;
+  --purple-7: #2c43c5;
+  --purple-8: #2238ba;
+  --purple-9: #0b23a7;
+  /* Green - based on #30cf95 */
+  --green-0: #e0f7ec;
+  --green-1: #b4ead1;
+  --green-2: #7fdcb3;
+  --green-3: #30cf95;
+  --green-4: #00c47d;
+  --green-5: #00b868;
+  --green-6: #00a85d;
+  --green-7: #00964f;
+  --green-8: #008443;
+  --green-9: #00642d;
+  /* Gray - based on #1e2429 */
+  --dark-0: #354049;
+  --dark-1: #2f3941;
+  --dark-2: #2a3239;
+  --dark-3: #242b31;
+  --dark-4: #1e2429;
+  --dark-5: #1b2024;
+  --dark-6: #171c20;
+  --dark-7: #14181b;
+  --dark-8: #111417;
+  --dark-9: #0d1012;
+  /* White - based on #333d45 */
+  --light-0: #ffffff;
+  --light-1: #ededed;
+  --light-2: #cfd3d7;
+  --light-3: #aeb7be;
+  --light-4: #8d9aa5;
+  --light-5: #758592;
+  --light-6: #5d7180;
+  --light-7: #516370;
+  --light-8: #424f5a;
+  --light-9: #333d45;
+}

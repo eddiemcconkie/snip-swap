@@ -9,9 +9,16 @@ type RestResponse<T> =
     }
   | {
       status: 'ERR';
-      details: string;
+      detail: string;
       time: string;
     };
+
+type RestResponseError = {
+  code: 400;
+  details: string;
+  description: string;
+  information: string;
+};
 
 type Auth =
   | {
@@ -51,9 +58,11 @@ export const surql = (strings: TemplateStringsArray, ...args: unknown[]): SurQL 
   const params: Record<string, string> = {};
   args.forEach((value, i) => {
     const paramName = `_${i}`;
-    query += `$${paramName}` + strings[i + 1];
+    // query += `$${paramName}` + strings[i + 1];
+    query = query.concat('$', paramName, strings[i + 1]);
     params[paramName] = JSON.stringify(value);
   });
+  console.log({ query, params });
   return { query, params };
 };
 
@@ -76,7 +85,7 @@ export class Surreal {
   private async request(
     sql: string,
     params?: Record<string, string | number | boolean>,
-  ): Promise<RestResponse<unknown | null>[]> {
+  ): Promise<RestResponse<unknown | null>[] | RestResponseError> {
     const url = new URL(`${PUBLIC_SURREAL_HOST}/sql`);
     if (params)
       Object.entries(params).forEach(([param, value]) => {
@@ -109,6 +118,12 @@ export class Surreal {
     // if (responses.length !== schemas.length)
     //   throw new Error('Number of Surreal responses and Zod schemas do not match');
 
+    // RestResponseError
+    if (!Array.isArray(responses)) {
+      console.log(responses);
+      throw new Error('SurrealDB error');
+    }
+
     return responses.map(
       (response, i): Response<unknown[]> =>
         response.status === 'OK'
@@ -122,7 +137,7 @@ export class Surreal {
                 ? 1
                 : 0,
             }
-          : { ok: false, error: response.details, time: response.time },
+          : { ok: false, error: response.detail, time: response.time },
     ) as any;
   }
 }

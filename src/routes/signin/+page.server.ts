@@ -7,7 +7,14 @@ export async function load({ locals }) {
 }
 
 export const actions = {
-  async github({ cookies, url }) {
+  async github({ cookies, locals, url }) {
+    let redirectTo = url.searchParams.get('redirectTo');
+    if (!redirectTo?.startsWith('/')) redirectTo = '/';
+
+    // Redirect if already authenticated
+    const session = await locals.auth.validate();
+    if (session) throw redirect(302, redirectTo);
+
     const [authorizationUrl, state] = await githubAuth.getAuthorizationUrl();
 
     cookies.set('github_oauth_state', state, {
@@ -16,12 +23,10 @@ export const actions = {
     });
 
     // Where to redirect to after authorizing
-    const redirectTo = url.searchParams.get('redirectTo');
-    if (redirectTo?.startsWith('/'))
-      cookies.set('redirect_to', redirectTo, {
-        path: '/',
-        maxAge: 60 * 60,
-      });
+    cookies.set('redirect_to', redirectTo, {
+      path: '/',
+      maxAge: 60 * 60,
+    });
 
     throw redirect(302, authorizationUrl.toString());
   },
