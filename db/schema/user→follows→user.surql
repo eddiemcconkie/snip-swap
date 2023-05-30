@@ -16,4 +16,7 @@ DEFINE FIELD out ON follows
   TYPE record(auth_user)
   -- ASSERT $value != $auth
 ;
+
+DEFINE INDEX unique_relation ON follows COLUMNS in, out UNIQUE;
+
   

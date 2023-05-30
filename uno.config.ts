@@ -16,7 +16,7 @@ const position: Record<string, string[]> = {
 export default defineConfig({
   presets: [
     presetIcons({
-      scale: 0.8,
+      scale: 1,
       extraProperties: {
         display: 'inline-block',
         // 'vertical-align': 'middle',

@@ -16,3 +16,6 @@ DEFINE FIELD out ON organized
   TYPE record(collection)
   -- ASSERT $scope = NONE OR $value.owner = $auth
 ;
+
+DEFINE INDEX unique_relation ON organized COLUMNS in, out UNIQUE;
+

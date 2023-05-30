@@ -39,6 +39,11 @@ DEFINE FIELD owner ON snippet
   VALUE IF $scope != NONE THEN $before OR $auth ELSE $value END
   ASSERT $value != NONE
 ;
+DEFINE FIELD mine ON snippet
+  VALUE <future> { owner = $auth }
+;
+UPDATE snippet SET mine = <future> { owner = $auth };
+
 DEFINE FIELD public ON snippet
   TYPE bool
   -- Once a snippet is made public, it can't be made private again
@@ -46,4 +51,17 @@ DEFINE FIELD public ON snippet
   ASSERT $value != NONE
 ;
 
+DEFINE FIELD saved ON snippet
+  VALUE <future> { count(<-saved[WHERE in = $auth.id]) > 0 }
+;
+UPDATE snippet SET saved = <future> { count(<-saved[WHERE in = $auth.id]) > 0 };
 
+DEFINE FIELD saveCount ON snippet
+  VALUE <future> { count(<-saved) }
+;
+UPDATE snippet SET saveCount = <future> { count(<-saved) };
+
+DEFINE FIELD commentCount ON snippet
+  VALUE <future> { count(<-commented) }
+;
+UPDATE snippet SET commentCount = <future> { count(<-commented) };

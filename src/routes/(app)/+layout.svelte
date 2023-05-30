@@ -1,11 +1,10 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import Button from '$lib/components/button.svelte';
+  import { createPageActionContext } from '$lib/context/page-action';
   import { resize } from '$lib/helpers/image';
-  import { setContext } from 'svelte';
-  import { writable } from 'svelte/store';
   import { fly } from 'svelte/transition';
-  import logoSmall from '../../assets/logo-small.svg';
+  import logoSmall from '/src/assets/logo-small.svg';
 
   let menuOpen = false;
 
@@ -19,8 +18,7 @@
    * Pages can optionally define a callback function for when the page action button
    * is pressed (small screens only)
    */
-  const pageAction = writable<(() => void) | null>(null);
-  setContext('pageAction', pageAction);
+  const pageAction = createPageActionContext();
 </script>
 
 <svelte:window
@@ -52,17 +50,17 @@
         <li class:current-page={isCurrentPage}>
           <Button
             color="primary"
-            outlined={!isCurrentPage}
+            style={isCurrentPage ? 'solid' : 'outlined'}
             href={path}
             aria-current={isCurrentPage ? 'page' : false}
           >
             <svelte:fragment slot="icon">
               {#if path === '/'}
-                <i-heroicons:home-solid />
+                <i-heroicons:home-20-solid />
               {:else if path === '/saved'}
-                <i-heroicons:bookmark-solid />
+                <i-heroicons:bookmark-20-solid />
               {:else if path === '/snippet'}
-                <i-heroicons:pencil-solid />
+                <i-heroicons:pencil-20-solid />
               {/if}
             </svelte:fragment>
             <span class="medium-and-up">{text}</span>
@@ -71,8 +69,8 @@
       {/each}
       {#if $pageAction}
         <li class="page-action | small-only" transition:fly={{ y: 50 }}>
-          <Button color="accent" on:click={$pageAction}>
-            <i-heroicons:magnifying-glass-solid slot="icon" />
+          <Button color="accent" style="solid" on:click={$pageAction}>
+            <i-heroicons:magnifying-glass-20-solid slot="icon" />
             <span class="medium-and-up">search</span>
           </Button>
         </li>
@@ -85,24 +83,24 @@
       <img src={resize($page.data.user.avatar, 100)} alt={displayName} width="30" height="30" />
       <span>{displayName}</span>
     {/if}
-    <p>
-      {#if $page.data.user}
-        <a href="/signout">Sign out</a>
-      {:else}
-        <a href="/signin?redirectTo={$page.url.pathname}">Sign in</a>
-      {/if}
-    </p>
-    <p>
-      <a href="/sandbox">Sandbox</a>
-    </p>
+    <ul>
+      <li>
+        {#if $page.data.user}
+          <a href="/signout">Sign out</a>
+        {:else}
+          <Button href="/signin?redirectTo={$page.url.pathname}" style="solid">sign in</Button>
+        {/if}
+      </li>
+    </ul>
   </div>
   <div class="content">
     <slot />
   </div>
 </div>
 
-<style>
-  /* .nav, */
+<style lang="postcss">
+  @import '/src/styles/breakpoints.postcss';
+
   .menu,
   .content {
     overflow-y: auto;
@@ -115,12 +113,7 @@
       'header'
       'content'
       'nav';
-    /* grid-template-areas:
-      'header header'
-      'content menu'
-      'nav menu'; */
     grid-template-rows: auto 1fr auto;
-    /* grid-template-columns: 1fr auto; */
   }
   .header {
     position: relative;
@@ -157,7 +150,6 @@
     position: fixed;
     inset: 0 0 0 auto;
     transition: translate 300ms;
-    padding-top: 3rem; /* Change this */
   }
   .menu[data-open='false'] {
     translate: 100% 0;
@@ -176,14 +168,14 @@
     display: none;
   }
 
-  @media (min-width: 40rem) {
+  @media (--medium-screen) {
     .layout {
       grid-template-areas:
         'header content'
         'nav    content'
         'menu   content';
       grid-template-rows: auto 1fr auto;
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 250px 1fr;
     }
 
     .nav {
@@ -219,7 +211,7 @@
     }
   }
 
-  @media (min-width: 60rem) {
+  @media (--large-screen) {
     /* .layout {
       grid-template-areas:
         'header content'

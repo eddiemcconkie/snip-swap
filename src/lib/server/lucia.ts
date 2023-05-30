@@ -13,6 +13,9 @@ export const auth = lucia({
   transformDatabaseUser(userData) {
     return userData;
   },
+  experimental: {
+    debugMode: true,
+  },
 });
 export type Auth = typeof auth;
 

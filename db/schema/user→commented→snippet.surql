@@ -16,3 +16,5 @@ DEFINE FIELD out ON commented
   TYPE record(snippet)
   -- ASSERT $value.public = true
 ;
+
+DEFINE INDEX unique_relation ON saved COLUMNS in, out UNIQUE;

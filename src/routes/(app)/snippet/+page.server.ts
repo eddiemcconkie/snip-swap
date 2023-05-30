@@ -20,7 +20,7 @@ export async function load({ locals }) {
 
 export const actions = {
   async default({ locals, request }) {
-    const session = await locals.auth.validate();
+    const { session } = await locals.auth.validateUser();
     if (!session) throw error(401);
 
     const form = await superValidate(request, snippetFormFieldSchema);

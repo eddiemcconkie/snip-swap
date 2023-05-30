@@ -2,7 +2,7 @@ import { githubAuth } from '$lib/server/lucia.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-  const session = await locals.auth.validate();
+  const { session } = await locals.auth.validateUser();
   if (session) throw redirect(302, '/');
 }
 
@@ -12,7 +12,7 @@ export const actions = {
     if (!redirectTo?.startsWith('/')) redirectTo = '/';
 
     // Redirect if already authenticated
-    const session = await locals.auth.validate();
+    const { session } = await locals.auth.validateUser();
     if (session) throw redirect(302, redirectTo);
 
     const [authorizationUrl, state] = await githubAuth.getAuthorizationUrl();

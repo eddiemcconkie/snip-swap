@@ -16,3 +16,6 @@ DEFINE FIELD out ON posted
   TYPE record(snippet)
   -- ASSERT $scope = NONE OR $value.owner = $auth
 ;
+
+DEFINE INDEX unique_relation ON posted COLUMNS in, out UNIQUE;
+

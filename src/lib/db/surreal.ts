@@ -62,7 +62,7 @@ export const surql = (strings: TemplateStringsArray, ...args: unknown[]): SurQL 
     query = query.concat('$', paramName, strings[i + 1]);
     params[paramName] = JSON.stringify(value);
   });
-  console.log({ query, params });
+  // console.log({ query, params });
   return { query, params };
 };
 

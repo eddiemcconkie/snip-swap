@@ -1,6 +1,6 @@
 <script lang="ts">
   import SigninPrompt from '$lib/components/auth/signin-prompt.svelte';
-  import { setPageAction } from '../pageAction.js';
+  import { setPageAction } from '$lib/context/page-action.js';
 
   export let data;
 

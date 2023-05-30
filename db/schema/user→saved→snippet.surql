@@ -19,3 +19,5 @@ DEFINE FIELD out ON saved
 DEFINE FIELD collection ON saved
   TYPE record(collection)
 ;
+
+DEFINE INDEX unique_relation ON saved COLUMNS in, out UNIQUE;

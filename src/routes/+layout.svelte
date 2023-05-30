@@ -1,6 +1,6 @@
 <script>
   // CUBE CSS styles (import first)
-  import '../styles/cube.css';
+  import '../styles/cube.postcss';
   // UnoCSS Utilities (import last - styles that aren't in a @layer take priority)
   import 'virtual:uno.css';
 

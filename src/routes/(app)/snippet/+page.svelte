@@ -1,14 +1,20 @@
 <script lang="ts">
   import SigninPrompt from '$lib/components/auth/signin-prompt.svelte';
+  import LanguageIcon from '$lib/components/language-icon.svelte';
+  import { Select, SelectOption, SelectTrigger } from '$lib/components/select';
   import { superForm } from 'sveltekit-superforms/client';
   import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
   export let data;
 
   const { form } = superForm(data.form);
+
+  let lastUsedLanguage = 'svelte';
 </script>
 
-<SuperDebug data={$form} />
+<div class="step--2">
+  <SuperDebug data={$form} />
+</div>
 
 <h1>new snippet</h1>
 
@@ -28,11 +34,23 @@
     </div>
     <div>
       <label for="langauge">language</label>
-      <select name="language" id="language" bind:value={$form.language}>
+      <Select name="language" id="language">
+        {#each data.languages as language}
+          <SelectOption
+            label={language.name}
+            value={language.id}
+            selected={language.id === lastUsedLanguage}
+          >
+            <LanguageIcon slot="icon" language={language.id} />
+          </SelectOption>
+        {/each}
+        <SelectTrigger slot="trigger" />
+      </Select>
+      <!-- <select name="language" id="language" bind:value={$form.language}>
         {#each data.languages as language}
           <option value={language.id}>{language.name}</option>
         {/each}
-      </select>
+      </select> -->
     </div>
     <div>
       <label for="public">public</label>
