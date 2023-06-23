@@ -122,12 +122,12 @@
         >
           <i-heroicons:bookmark-20-solid />
           {#if !snippet.saved}
-            <span transition:slide|local={{ axis: 'x', duration: 100 }}>save</span>
+            <span transition:slide={{ axis: 'x', duration: 100 }}>save</span>
           {/if}
         </Button>
       </form>
       {#if snippet.saved}
-        <div transition:slide|local={{ axis: 'x', duration: 100 }}>
+        <div transition:slide={{ axis: 'x', duration: 100 }}>
           <Button
             type="button"
             color="accent"
@@ -197,7 +197,7 @@
     {/if}
     {#if latestComment}
       {#key latestComment}
-        <div class="flex gap-2xs mt-2xs" in:fade|local={{ duration: 250 }}>
+        <div class="flex gap-2xs mt-2xs" in:fade={{ duration: 250 }}>
           <div class="shrink-0">
             <Avatar user={latestComment.owner} --avatar-size={space('m')} />
           </div>
