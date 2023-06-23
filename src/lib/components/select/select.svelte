@@ -1,11 +1,14 @@
-<!-- select.svelte -->
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
   import { createSelectContext } from './context';
 
   export let name: string;
   export let id: string;
 
   const { currentSelected, dialog } = createSelectContext();
+
+  const dispatch = createEventDispatcher();
+  $: dispatch('select', $currentSelected);
 
   // $: rect = $anchor?.getBoundingClientRect() ?? null;
 

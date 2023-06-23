@@ -58,11 +58,9 @@ export const surql = (strings: TemplateStringsArray, ...args: unknown[]): SurQL 
   const params: Record<string, string> = {};
   args.forEach((value, i) => {
     const paramName = `_${i}`;
-    // query += `$${paramName}` + strings[i + 1];
     query = query.concat('$', paramName, strings[i + 1]);
     params[paramName] = JSON.stringify(value);
   });
-  // console.log({ query, params });
   return { query, params };
 };
 

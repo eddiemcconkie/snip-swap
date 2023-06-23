@@ -17,4 +17,34 @@ DEFINE FIELD out ON commented
   -- ASSERT $value.public = true
 ;
 
-DEFINE INDEX unique_relation ON saved COLUMNS in, out UNIQUE;
+DEFINE FIELD comment ON commented
+  TYPE string
+  ASSERT $value != NONE
+; 
+DEFINE FIELD time ON commented
+  TYPE object
+;
+DEFINE FIELD time.created ON commented
+  TYPE datetime
+  VALUE $before OR time::now()
+;
+-- Updated should not be set when the record is first created
+DEFINE FIELD time.updated ON commented
+  TYPE datetime
+  VALUE IF time.created < time::now() - 1s THEN time::now() ELSE NONE END
+;
+DEFINE FIELD time.since ON commented
+  VALUE <future> { time::now() - time.created }
+;
+UPDATE snippet SET time.since = <future> { time::now() - time.created };
+
+-- Root can update owner. Otherwise, set owner to the current user
+DEFINE FIELD owner ON commented
+  TYPE record(auth_user)
+  VALUE IF $scope != NONE THEN $before OR $auth ELSE $value END
+  ASSERT $value != NONE
+;
+DEFINE FIELD mine ON commented
+  VALUE <future> { owner = $auth }
+;
+UPDATE snippet SET mine = <future> { owner = $auth };

@@ -19,3 +19,46 @@ a:focus-visible {
 button {
   cursor: pointer;
 }
+
+input[type='text'] {
+  border: 0;
+  border-radius: 100vw;
+  background-color: var(--surface-3);
+  color: var(--on-surface);
+  padding-inline: var(--space-xs);
+  padding-block: var(--space-3xs);
+  width: 100%;
+}
+::placeholder {
+  color: var(--on-surface-faint);
+}
+
+input {
+  accent-color: var(--accent-2);
+}
+
+/*
+Focused elements should have an outline, unless they are the child of a .focus-parent element.
+This makes it easy to highlight the surrounding element, like on the searchbar, or anywhere
+an input gets paired with an icon
+*/
+@layer focus {
+  :not(.focus-parent) > :focus-visible,
+  .focus-parent:focus-within {
+    outline-color: var(--accent-2);
+    outline-style: solid;
+    outline-width: 2px;
+    outline-offset: var(--space-3xs);
+    transition: outline-offset 200ms;
+  }
+  .focus-parent > :focus-visible {
+    outline: transparent;
+  }
+}
+
+@layer focus-nav {
+  /* Focused nav links are purple! */
+  nav :is(a, button):focus-visible {
+    outline-color: var(--primary-2);
+  }
+}

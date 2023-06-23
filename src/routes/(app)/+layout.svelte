@@ -3,7 +3,7 @@
   import Button from '$lib/components/button.svelte';
   import { createPageActionContext } from '$lib/context/page-action';
   import { resize } from '$lib/helpers/image';
-  import { fly } from 'svelte/transition';
+  import { slide } from 'svelte/transition';
   import logoSmall from '/src/assets/logo-small.svg';
 
   let menuOpen = false;
@@ -27,21 +27,24 @@
   }}
 />
 
-<div class="layout">
-  <header class="header | bg-surface-1 pt-2xs pb-xs">
+<div class="layout | full-height">
+  <!-- <header class="header | bg-surface-1 pt-2xs pb-xs"> -->
+  <header class="header | bg-surface-1 p-3xs">
     <img src={logoSmall} alt="snipswap" />
-    <button
-      class="small-only"
-      on:click={() => {
-        menuOpen = !menuOpen;
-      }}
-    >
-      {#if menuOpen}
-        <i-heroicons:x-mark aria-label="close menu" />
-      {:else}
-        <i-heroicons:bars-3-bottom-right aria-label="open menu" />
-      {/if}
-    </button>
+    <div class="small-only">
+      <Button
+        style="ghost"
+        on:click={() => {
+          menuOpen = !menuOpen;
+        }}
+      >
+        {#if menuOpen}
+          <i-heroicons:x-mark aria-label="close menu" />
+        {:else}
+          <i-heroicons:bars-3-bottom-right aria-label="open menu" />
+        {/if}
+      </Button>
+    </div>
   </header>
   <nav class="nav | bg-surface-1">
     <ul class="px-xs gap-xs">
@@ -54,23 +57,22 @@
             href={path}
             aria-current={isCurrentPage ? 'page' : false}
           >
-            <svelte:fragment slot="icon">
-              {#if path === '/'}
-                <i-heroicons:home-20-solid />
-              {:else if path === '/saved'}
-                <i-heroicons:bookmark-20-solid />
-              {:else if path === '/snippet'}
-                <i-heroicons:pencil-20-solid />
-              {/if}
-            </svelte:fragment>
+            {#if path === '/'}
+              <i-heroicons:home-20-solid />
+            {:else if path === '/saved'}
+              <i-heroicons:bookmark-20-solid />
+            {:else if path === '/snippet'}
+              <i-heroicons:pencil-20-solid />
+            {/if}
             <span class="medium-and-up">{text}</span>
           </Button>
         </li>
       {/each}
       {#if $pageAction}
-        <li class="page-action | small-only" transition:fly={{ y: 50 }}>
+        <!-- <li class="page-action | small-only" transition:fly={{ y: 50 }}> -->
+        <li class="page-action | small-only" transition:slide={{ axis: 'x', duration: 200 }}>
           <Button color="accent" style="solid" on:click={$pageAction}>
-            <i-heroicons:magnifying-glass-20-solid slot="icon" />
+            <i-heroicons:magnifying-glass-20-solid />
             <span class="medium-and-up">search</span>
           </Button>
         </li>
@@ -78,33 +80,52 @@
     </ul>
   </nav>
   <div class="menu | bg-surface-1 p-xs" data-open={menuOpen}>
-    {#if $page.data.user}
-      {@const displayName = $page.data.user.name ?? $page.data.user.username}
-      <img src={resize($page.data.user.avatar, 100)} alt={displayName} width="30" height="30" />
-      <span>{displayName}</span>
-    {/if}
     <ul>
-      <li>
-        {#if $page.data.user}
-          <a href="/signout">Sign out</a>
-        {:else}
+      {#if $page.data.user}
+        <li>
+          <Button href="/">
+            <img
+              src={resize($page.data.user.avatar, 100)}
+              alt={$page.data.user.name}
+              width="30"
+              height="30"
+              class="avatar | radius-round"
+            />
+            <span>{$page.data.user.name}</span>
+          </Button>
+        </li>
+        <li>
+          <Button href="/">
+            <i-heroicons:cog-20-solid />
+            extension
+          </Button>
+        </li>
+        <li>
+          <Button href="/">
+            <i-heroicons:exclamation-triangle-20-solid />
+            report an issue
+          </Button>
+        </li>
+        <li>
+          <Button href="/signout">
+            <i-heroicons:arrow-left-on-rectangle-20-solid />
+            sign out
+          </Button>
+        </li>
+      {:else}
+        <li>
           <Button href="/signin?redirectTo={$page.url.pathname}" style="solid">sign in</Button>
-        {/if}
-      </li>
+        </li>
+      {/if}
     </ul>
   </div>
-  <div class="content">
+  <div class="content | full-height">
     <slot />
   </div>
 </div>
 
 <style lang="postcss">
   @import '/src/styles/breakpoints.postcss';
-
-  .menu,
-  .content {
-    overflow-y: auto;
-  }
 
   .layout {
     height: 100%;
@@ -115,12 +136,26 @@
       'nav';
     grid-template-rows: auto 1fr auto;
   }
+
+  .menu {
+    overflow-y: auto;
+    position: relative;
+    z-index: 9999;
+    grid-area: 2 / 1 / -1 / -1; /* Covers content and nav */
+    transition: translate 300ms;
+  }
+  .menu[data-open='false'] {
+    translate: 100% 0;
+  }
+
   .header {
     position: relative;
-    z-index: 999;
+    z-index: 99999;
     grid-area: header;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    border-block-end: var(--border-dark);
   }
   /* Logo in center and menu button on right */
   .header > :first-child {
@@ -129,11 +164,13 @@
   .header > :nth-child(2) {
     justify-self: end;
   }
+
   .nav {
     grid-area: nav;
     position: sticky;
     bottom: 0;
     font-size: var(--step-1);
+    z-index: 999;
   }
   .nav > ul {
     margin: auto;
@@ -145,15 +182,6 @@
     translate: 0 -30%;
   }
 
-  .menu {
-    grid-area: menu;
-    position: fixed;
-    inset: 0 0 0 auto;
-    transition: translate 300ms;
-  }
-  .menu[data-open='false'] {
-    translate: 100% 0;
-  }
   .content {
     grid-area: content;
   }
@@ -178,9 +206,14 @@
       grid-template-columns: 250px 1fr;
     }
 
+    .header {
+      border-block-end: 0;
+    }
+
     .nav {
       overflow-y: auto;
       font-size: var(--step-0);
+      padding-block-start: var(--space-l);
     }
     .nav > ul {
       flex-direction: column;
@@ -191,6 +224,7 @@
     }
 
     .menu {
+      grid-area: menu;
       position: static;
       transition: translate 0s;
     }
@@ -209,6 +243,12 @@
     .medium-and-up {
       display: block;
     }
+
+    .header,
+    .nav,
+    .menu {
+      border-inline-end: var(--border-dark);
+    }
   }
 
   @media (--large-screen) {
@@ -220,5 +260,10 @@
       grid-template-rows: auto 1fr;
       grid-template-columns: auto 1fr;
     } */
+  }
+
+  .avatar {
+    width: 1em;
+    height: 1em;
   }
 </style>

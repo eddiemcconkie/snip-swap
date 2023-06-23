@@ -1,26 +1,30 @@
-import { connect, surql } from '$lib/db/surreal.js';
-import { languageSchema } from '$lib/schema/language.js';
+import { surql } from '$lib/db/surreal.js';
+import { record } from '$lib/schema/id.js';
 import { postedSchema } from '$lib/schema/posted.js';
 import { snippetSchema } from '$lib/schema/snippet.js';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 
-const snippetFormFieldSchema = snippetSchema.omit({ id: true, owner: true, time: true });
+const snippetFormFieldSchema = snippetSchema
+  .pick({
+    code: true,
+    description: true,
+    language: true,
+    public: true,
+  })
+  .merge(z.object({ language: record() }));
 
 export async function load({ locals }) {
   const { user } = await locals.auth.validateUser();
   const form = superValidate(snippetFormFieldSchema);
 
-  const db = connect(locals.surrealToken);
-  const [languages] = await db.query(surql`SELECT * FROM language`, languageSchema.array());
-
-  return { user, form, languages: languages.ok ? languages.result : [] };
+  return { user, form };
 }
 
 export const actions = {
-  async default({ locals, request }) {
-    const { session } = await locals.auth.validateUser();
+  async default({ locals: { auth, db }, request }) {
+    const { session } = await auth.validateUser();
     if (!session) throw error(401);
 
     const form = await superValidate(request, snippetFormFieldSchema);
@@ -29,9 +33,6 @@ export const actions = {
       return fail(400, { form });
     }
 
-    console.log(form.data);
-
-    const db = connect(locals.surrealToken);
     const [newSnippet, posted] = await db.query(
       surql`
         BEGIN;

@@ -68,5 +68,30 @@ export default defineConfig({
     // Color
     [/^color-(.+)$/, ([_, color]) => ({ color: `var(--${color})` })],
     [/^bg-(.+)$/, ([_, color]) => ({ 'background-color': `var(--${color})` })],
+
+    // Border
+    [
+      /^border-(dark|light)(?:-([xytblr]))?$/,
+      ([_, color, pos]) => {
+        pos ||= 'default';
+        if (!position[pos]) return {};
+
+        return Object.fromEntries([
+          ...position[pos].flatMap((p) => [
+            [`border-${p}-width`, `var(--border-width)`],
+            [`border-${p}-color`, `var(--border-color-${color})`],
+            [`border-${p}-style`, `solid`],
+          ]),
+        ]);
+      },
+    ],
+
+    // Line height
+    [
+      /^lh-(\d+(?:\.\d+)?)$/,
+      ([_, lineHeight]) => ({
+        'line-height': lineHeight,
+      }),
+    ],
   ],
 });

@@ -1,10 +1,32 @@
 .flex {
   display: flex;
 
+  &.column {
+    flex-direction: column;
+  }
   &.space-between {
     justify-content: space-between;
   }
   &.align-center {
     align-items: center;
+  }
+  &.justify-center {
+    justify-content: center;
+  }
+  &.justify-end {
+    justify-content: flex-end;
+  }
+  &.wrap {
+    flex-wrap: wrap;
+  }
+
+  > .grow {
+    flex-grow: 1;
+  }
+  > .grow-shrink {
+    flex: 1 1 auto;
+  }
+  > .shrink-0 {
+    flex-shrink: 0;
   }
 }

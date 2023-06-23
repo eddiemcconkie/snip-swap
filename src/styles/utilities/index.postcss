@@ -1,1 +1,28 @@
 @import './flex.postcss' layer(flex);
+
+/* Floating action button */
+.fab {
+  position: fixed;
+  inset-inline-end: var(--space-m);
+  inset-block-end: var(--space-s);
+}
+
+.full-height {
+  height: 100%;
+  overflow: hidden;
+  /* height: 100vh; */
+  /* height: 100dvh; */
+}
+
+.stacked {
+  display: grid;
+  grid-template-areas: 'stacked';
+}
+.stacked > * {
+  grid-area: stacked;
+}
+
+.truncate {
+  overflow-x: hidden;
+  white-space: nowrap;
+}

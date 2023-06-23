@@ -21,3 +21,8 @@ DEFINE FIELD collection ON saved
 ;
 
 DEFINE INDEX unique_relation ON saved COLUMNS in, out UNIQUE;
+
+
+--- Cancel transactions inside of an IF statement using "CREATE cancel"
+DEFINE TABLE cancel SCHEMAFULL;
+DEFINE FIELD id ON cancel ASSERT false; 

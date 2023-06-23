@@ -1,91 +1,60 @@
 <script lang="ts">
-  import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
   import Button from '$lib/components/button.svelte';
+  import SplitLayout from '$lib/components/layout/split-layout.svelte';
   import Snippet from '$lib/components/snippet.svelte';
   import { setPageAction } from '$lib/context/page-action.js';
 
   export let data;
 
-  setPageAction(() => {});
+  let sidebarOpen: boolean;
+
+  setPageAction(() => {
+    sidebarOpen = !sidebarOpen;
+  });
+
+  let query = $page.url.searchParams.get('q') ?? '';
 </script>
 
-<main class="p-xs">
-  {#each data.snippets as snippet (snippet.id)}
-    <div>
-      <Snippet {snippet} />
-      <!-- <img
-        src={resize(snippet.owner.avatar, 100)}
-        alt={snippet.owner.name}
-        width="30"
-        height="30"
-      />
-      <p>created by <a href="/user/{snippet.owner.username}">{snippet.owner.name}</a></p>
-      <pre>{snippet.code}</pre>
-      <p>{snippet.description}</p>
-      <p>{snippet.language.name}</p>
-      <p><a href="/snippet/{snippet.id}">view snippet</a></p> -->
-      {#if true}
-        <!-- {#if !snippet.mine} -->
-        <form
-          method="POST"
-          use:enhance={() => {
-            if (!data.user) {
-              return;
-            }
-            data.snippets = data.snippets.map((s) =>
-              s.id === snippet.id ? { ...s, saved: !s.saved } : s,
-            );
-            return async ({ update }) => {
-              await update();
-            };
-            // return async ({ result, update, action }) => {
-            //   await update();
-            // };
-          }}
-        >
-          {#if snippet.saved}
-            <Button
-              type="submit"
-              color="accent"
-              style="solid"
-              formaction="/snippet/{snippet.id}?/unsave"
-              aria-label="unsave"
-            >
-              <i-heroicons:bookmark-20-solid slot="icon" />
-              <!-- unsave -->
-            </Button>
-            <!-- <Button
-            on:click={(e) => {
-              e.preventDefault();
-            }}
-            color="accent"
-            outlined
-          >
-            <i-heroicons:plus-20-solid slot="icon" />
-          </Button> -->
-          {:else}
-            <Button
-              type="submit"
-              color="accent"
-              style="outlined"
-              formaction="/snippet/{snippet.id}?/save"
-            >
-              <i-heroicons:bookmark-20-solid slot="icon" />
-              save
-            </Button>
-          {/if}
-        </form>
-      {/if}
+<SplitLayout bind:sidebarOpen>
+  <svelte:fragment slot="main">
+    <div class="snippet-container | pt-s pb-l flex column gap-s">
+      {#each data.snippets as snippet (snippet.id)}
+        <Snippet {snippet} latestComment={snippet.latestComment} />
+      {/each}
     </div>
-    <br />
-  {/each}
+  </svelte:fragment>
 
-  <!-- <button
-    on:click={() =>
-      openModal({
-        content: 'hey',
-      })}
-  >
-    Show modal
-  </button> -->
-</main>
+  <svelte:fragment slot="sidebar">
+    <form method="get">
+      <!-- <div class="flex align-center justify-end wrap gap-2xs-xs"> -->
+      <div class="flex align-center justify-end gap-2xs-xs">
+        <div
+          class="searchbar-input | flex align-center bg-surface-3 radius-round pl-2xs | focus-parent"
+        >
+          <i-heroicons:magnifying-glass-20-solid class="step-1 shrink-0" />
+          <input type="text" name="q" id="search-query" bind:value={query} />
+        </div>
+        <Button color="accent" style="solid" type="submit">search</Button>
+      </div>
+    </form>
+  </svelte:fragment>
+
+  <i-heroicons:magnifying-glass-20-solid slot="fab-icon" />
+</SplitLayout>
+
+<style lang="postcss">
+  @import '/src/styles/breakpoints.postcss';
+
+  .snippet-container {
+    @media (--medium-screen) {
+      margin-inline: auto;
+      max-width: 45rem;
+      width: calc(100% - var(--space-m));
+    }
+  }
+
+  /* .searchbar-input {
+    flex: 1 1 10rem;
+  } */
+</style>

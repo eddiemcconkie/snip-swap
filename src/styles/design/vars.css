@@ -1,0 +1,5 @@
+:root {
+  --border-width: 1px;
+  --border-dark: var(--border-width) solid var(--border-color-dark);
+  --border-light: var(--border-width) solid var(--border-color-light);
+}

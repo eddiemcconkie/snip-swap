@@ -1,24 +1,17 @@
-import { connect, surql } from '$lib/db/surreal.js';
-import { userSchema } from '$lib/schema/auth.js';
-import { snippetFetchLanguage } from '$lib/schema/snippet.js';
-import { redirect } from '@sveltejs/kit';
-import { z } from 'zod';
+import { getUserWithSnippets } from '$lib/db/snippets.js';
+import { error, redirect } from '@sveltejs/kit';
 
-const userWithSnippets = userSchema.merge(z.object({ snippets: snippetFetchLanguage.array() }));
+export async function load({ locals: { auth, db }, params }) {
+  const { user } = await auth.validateUser();
 
-export async function load({ locals, params }) {
-  const { user } = await locals.auth.validateUser();
-  const db = connect(locals.surrealToken);
-  const [selectedUser] = await db.query(
-    surql`
-      SELECT *, ->posted->snippet AS snippets
-      FROM auth_user
-      WHERE username = type::string(${params.username})
-      FETCH snippets, snippets.language
-    `,
-    userWithSnippets.array(),
-  );
-  if (!selectedUser.ok || selectedUser.count !== 1) throw redirect(302, '/');
+  const { user: selectedUser } = await getUserWithSnippets(db, params.username);
+
+  if (!selectedUser.ok) {
+    throw error(500, 'something went wrong');
+  }
+  if (selectedUser.count !== 1) {
+    throw redirect(302, '/');
+  }
 
   return { user, selectedUser: selectedUser.result[0] };
 }

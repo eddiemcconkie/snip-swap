@@ -1,15 +1,14 @@
-import { connect, surql } from '$lib/db/surreal.js';
+import { surql } from '$lib/db/surreal.js';
 import { collectionSchema } from '$lib/schema/collection.js';
 import { snippetSchema } from '$lib/schema/snippet.js';
 import { error, redirect } from '@sveltejs/kit';
 
-export async function load({ locals, params }) {
-  const { user } = await locals.auth.validateUser();
+export async function load({ locals: { auth, db }, params }) {
+  const { user } = await auth.validateUser();
   if (!user) throw redirect(302, '/');
 
-  const db = connect(locals.surrealToken);
   const [collection] = await db.query(
-    surql`SELECT * FROM type::thing('collection', ${params.id})`,
+    surql`SELECT * FROM type::thing('collection', ${params.collectionId})`,
     collectionSchema.array(),
   );
   if (!collection.ok || collection.count !== 1) throw redirect(302, '/');
@@ -17,7 +16,7 @@ export async function load({ locals, params }) {
   const [snippets] = await db.query(
     surql`
       SELECT VALUE 
-        ->saved[WHERE collection = type::thing('collection', ${params.id})]->snippet AS snippets 
+        ->saved[WHERE collection = type::thing('collection', ${params.collectionId})]->snippet AS snippets 
       FROM $auth
     `,
     snippetSchema.array(),

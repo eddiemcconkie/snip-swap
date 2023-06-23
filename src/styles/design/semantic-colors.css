@@ -22,9 +22,18 @@
   --on-surface: var(--light-0);
   --surface-highlight: var(--dark-0);
   --on-surface-highlight: var(--light-0);
+  --on-surface-faint: var(--purple-2);
   /* Links */
   --link: var(--purple-3);
   --link-hover: var(--purple-1);
+  /* Error */
+  /* --error: var(--surface-2); */
+  --error: hsl(var(--red-9-hsl) / 10%);
+  --on-error: var(--red-0);
+  /* Borders */
+  --border-color-dark: var(--dark-8);
+  --border-color-light: var(--dark-2);
+  --border-color-error: var(--red-4);
 }
 
 /* Light theme */

@@ -44,4 +44,17 @@
   --light-7: #516370;
   --light-8: #424f5a;
   --light-9: #333d45;
+
+  /* Red - based on #d67455 */
+  --red-0: #f3e9e8;
+  --red-1: #eecac0;
+  --red-2: #e4a998;
+  --red-3: #db8a71;
+  --red-4: #d67355;
+  --red-5: #d25f3c;
+  --red-6: #c85938;
+  --red-7: #ba5334;
+  --red-8: #ab4e31;
+  --red-9: #944129;
+  --red-9-hsl: 13 57% 37%;
 }

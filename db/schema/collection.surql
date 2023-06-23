@@ -14,3 +14,5 @@ DEFINE FIELD owner ON collection
   TYPE record(auth_user)
   VALUE IF $scope != NONE THEN $before OR $auth ELSE $value END
 ;
+
+DEFINE INDEX unique_name ON collection COLUMNS name, owner UNIQUE;

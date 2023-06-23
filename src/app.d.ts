@@ -1,5 +1,7 @@
 /// <reference types="lucia-auth" />
 
+import type { Surreal } from '$lib/db/surreal';
+
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 declare global {
@@ -8,6 +10,7 @@ declare global {
     interface Locals {
       auth: import('lucia-auth').AuthRequest;
       surrealToken: string;
+      db: Surreal;
     }
     interface PageData {
       user: import('lucia-auth').User | null;

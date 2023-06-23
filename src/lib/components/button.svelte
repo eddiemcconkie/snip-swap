@@ -1,39 +1,64 @@
 <script lang="ts">
-  type Color = 'primary' | 'accent';
+  import Loading from './loading.svelte';
+
+  type Color = 'primary' | 'accent' | 'surface';
   type Style = 'solid' | 'outlined' | 'ghost';
 
-  export let color: Color = 'primary';
-  export let style: Style;
+  export let color: Color = 'surface';
+  export let style: Style = 'ghost';
 
   export let href: string | null = null;
+
+  export let fullwidth = false;
+
+  export let loading = false;
+
+  let classes = '';
+  export { classes as class };
 </script>
 
-{#if href}
-  <a class="button" data-color={color} data-style={style} {...$$restProps} {href} on:click>
-    <slot name="icon" />
+<svelte:element
+  this={href ? 'a' : 'button'}
+  class="button | stacked | {classes}"
+  data-color={color}
+  data-style={style}
+  class:fullwidth
+  {href}
+  on:click
+  {...$$restProps}
+>
+  <span class="flex align-center" style:visibility={loading ? 'hidden' : 'visible'}>
     <slot />
-  </a>
-{:else}
-  <button class="button" data-color={color} data-style={style} {...$$restProps} on:click>
-    <slot name="icon" />
-    <slot />
-  </button>
-{/if}
+  </span>
+  <!-- <span class="flex justify-center align-center" style:visibility={loading ? 'visible' : 'hidden'}>
+    <i-svg-spinners:6-dots-scale-middle />
+  </span> -->
+  <span style:display={loading ? 'block' : 'none'}>
+    <!-- <span style:visibility={loading ? 'visible' : 'hidden'}> -->
+    <Loading delay={5} />
+  </span>
+</svelte:element>
 
 <style lang="postcss">
   button,
   a {
-    display: flex;
-    align-items: center;
+    /* display: flex; */
+    /* display: inline-grid; */
+    /* align-items: center; */
     padding: 0.4em 0.8em;
-    gap: 0.4em;
+    /* gap: 0.4em; */
     text-decoration: none;
     line-height: 1;
     background-color: transparent;
-    border: 0;
-    /* border-radius: 100vw; */
-    border-radius: 0.8em;
-    border: 0.1em solid var(--button-border-color);
+    border-radius: 100vw;
+    /* border-radius: 0.8em; */
+    border: 0.1em solid var(--button-border-color, transparent);
+    /* overflow-x: hidden;
+    white-space: nowrap; */
+
+    > :first-child {
+      gap: 0.4em;
+    }
   }
 
   /* Color */
@@ -63,10 +88,25 @@
       color: var(--on-accent);
       --button-border-color: var(--accent-0);
 
-      [data-style='outlined'] {
+      &[data-style='outlined'] {
         background-color: var(--surface-0);
         color: var(--on-surface);
       }
+    }
+  }
+  [data-color='surface'] {
+    color: var(--on-surface);
+
+    &:is(:hover, :focus-visible) {
+      /* background-color: var(--surface-1); */
+      background-color: rgb(0 0 0 / 0.2);
+      /* color: var(--on-accent); */
+      /* --button-border-color: var(--accent-0); */
+
+      /* [data-style='outlined'] {
+        background-color: var(--surface-0);
+        color: var(--on-surface);
+      } */
     }
   }
 
@@ -81,4 +121,8 @@
   [data-outlined='true'][data-color='accent'] {
     --button-border-color: var(--accent-0);
   } */
+
+  .fullwidth {
+    width: 100%;
+  }
 </style>
