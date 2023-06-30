@@ -173,7 +173,9 @@
 
   <div class="snippet-comments border-dark-t">
     <div class="flex align-center gap-2xs-xs py-2xs">
-      <Avatar user={snippet.owner} --avatar-size={space('m')} />
+      {#if $page.data.user}
+        <Avatar user={$page.data.user} --avatar-size={space('m')} />
+      {:else}{/if}
       <form
         method="post"
         class="snippet-comments__reply | flex gap-2xs step--1 radius-round bg-surface-3 grow"
@@ -297,9 +299,9 @@
   .snippet-comments {
     padding-inline: var(--space-2xs);
 
-    @media (--medium-screen) {
+    /* @media (--medium-screen) {
       padding-inline: 0;
-    }
+    } */
   }
 
   .snippet-header::before,
