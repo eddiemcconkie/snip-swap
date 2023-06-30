@@ -1,4 +1,5 @@
 @import './flex.postcss' layer(flex);
+@import '/src/styles/breakpoints.postcss';
 
 /* Floating action button */
 .fab {
@@ -25,4 +26,36 @@
 .truncate {
   overflow-x: hidden;
   white-space: nowrap;
+}
+.truncate.ellipsis {
+  text-overflow: ellipsis;
+}
+
+/* Screen queries */
+
+.screen\:s {
+  @media (--medium-screen) {
+    display: none;
+  }
+}
+
+.screen\:m {
+  /* .medium-screen-only { */
+  display: none;
+
+  @media (--medium-screen) {
+    display: block;
+  }
+
+  @media (--large-screen) {
+    display: none;
+  }
+}
+
+.screen\:m-l {
+  display: none;
+
+  @media (--medium-screen) {
+    display: block;
+  }
 }

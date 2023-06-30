@@ -9,7 +9,6 @@ const languageMap: Record<string, string> = {
   html: 'HTML',
   java: 'Java',
   javascript: 'JavaScript',
-  json: 'JSON',
   md: 'Markdown',
   php: 'PHP',
   python: 'Python',
@@ -30,7 +29,7 @@ export function getLanguageDisplay(lang: string) {
 }
 
 export const languageSchema = z.object({
-  // id: record().refine((arg) => Object.keys(languageMap).includes(arg), {
   id: record(),
   name: z.string().trim().min(1),
 });
+export type LanguageSchema = z.infer<typeof languageSchema>;

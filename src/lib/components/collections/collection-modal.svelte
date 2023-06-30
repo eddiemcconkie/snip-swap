@@ -6,20 +6,19 @@
     ModalContent,
     ModalFooter,
     ModalHeader,
-  } from '$lib/components/custom-modal';
+  } from '$lib/components/modal';
   import { get } from '$lib/fetch/get';
   import type { CollectionSchema } from '$lib/schema/collection';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import Button from '../button.svelte';
-  import { getModalContext } from '../custom-modal/context';
   import Loading from '../loading.svelte';
+  import { getModalContext } from '../modal/context';
 
   export let snippetId: string;
 
   export let currentCollection: CollectionSchema | null;
-  $: console.log(currentCollection);
 
   export let onSubmit = (value: string | null) => {};
 
@@ -145,7 +144,7 @@
 
         <ul class="flex wrap gap-2xs">
           {#each sorted(collections, newCollectionName) as collection (collection.id)}
-            <li in:slide animate:flip={{ duration: 200 }}>
+            <li in:slide|global animate:flip={{ duration: 200 }}>
               <Button
                 color="accent"
                 style={collection.name === newCollectionName ? 'solid' : 'outlined'}

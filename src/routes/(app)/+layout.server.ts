@@ -1,4 +1,3 @@
 // export async function load({ locals }) {
-//   const { user } = await locals.auth.validateUser();
-//   return { user };
+//   const languages = await locals.db.query(surql`SELECT * FROM language`, languageSchema.array());
 // }

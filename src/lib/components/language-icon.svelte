@@ -14,8 +14,6 @@
   <i-logos:java />
 {:else if language === 'javascript'}
   <i-logos:javascript />
-{:else if language === 'json'}
-  <i-logos:json />
 {:else if language === 'md'}
   <!-- <i-logos:markdown?mask /> -->
   <span class="i-logos:markdown?mask" />

@@ -12,15 +12,17 @@
 
 <div class="split-layout | full-height" data-sidebar={sidebarOpen ? 'open' : 'closed'}>
   <!-- <main class="px-s"> -->
-  <main>
-    <slot name="main" />
+  <main class="full-height">
+    <div class="main-header | bg-surface-0 border-dark-b"><slot name="main-header" /></div>
+    <div class="main-content"><slot name="main" /></div>
   </main>
 
   <aside class="bg-surface-1 p-2xs-xs">
     <slot name="sidebar" />
   </aside>
 
-  <div class="medium-screen-only | fab step-1">
+  <div class="screen:m | fab step-1">
+    <!-- <div class="medium-screen-only | fab step-1"> -->
     <Button color="accent" style="solid" on:click={() => (sidebarOpen = !sidebarOpen)}>
       <slot name="fab-icon" />
     </Button>
@@ -42,8 +44,15 @@
   }
 
   main {
-    overflow-y: auto;
     grid-area: main;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+  .main-header:empty {
+    display: contents;
+  }
+  .main-content {
+    overflow-y: auto;
   }
 
   aside {
@@ -65,40 +74,5 @@
 
   [data-sidebar='open'] > aside {
     translate: 0 0;
-  }
-
-  /* [data-sidebar='open'] {
-    > main {
-      pointer-events: none;
-    }
-    > aside {
-      translate: 0 0;
-      pointer-events: auto;
-    }
-  }
-  [data-sidebar='closed'] {
-    > main {
-      pointer-events: auto;
-    }
-    > aside {
-      pointer-events: none;
-    }
-  }
-  @media (--large-screen) {
-    [data-sidebar] > :is(main, aside) {
-      pointer-events: auto;
-    }
-  } */
-
-  .medium-screen-only {
-    display: none;
-
-    @media (--medium-screen) {
-      display: block;
-    }
-
-    @media (--large-screen) {
-      display: none;
-    }
   }
 </style>

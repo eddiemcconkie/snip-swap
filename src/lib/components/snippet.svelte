@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
+  import { get } from '$lib/fetch/get';
   import { space } from '$lib/helpers/css-vars';
   import { formatSince } from '$lib/helpers/since';
   import type { SimpleComment } from '$lib/schema/commented';
@@ -11,9 +12,11 @@
   import Button from './button.svelte';
   import ReadonlyCodeBlock from './code/readonly-code-block.svelte';
   import CollectionModal from './collections/collection-modal.svelte';
-  import { openModal } from './custom-modal/modal-outlet.svelte';
+  import Comment from './comment.svelte';
   import ErrorBanner from './error-banner.svelte';
   import LanguageIcon from './language-icon.svelte';
+  import Loading from './loading.svelte';
+  import { openModal } from './modal/modal-outlet.svelte';
 
   export let snippet: SnippetSchema;
 
@@ -38,9 +41,13 @@
     }
   };
 
+  export let singleComment = false;
   export let latestComment: SimpleComment | null = null;
-  $: console.log(latestComment);
   let commentError = '';
+
+  let commentsPromise = singleComment
+    ? null
+    : get('/api/public/snippet/[snippetId]/comments', { snippetId: snippet.id });
 
   const handleComment: SubmitFunction = ({ cancel }) => {
     if (comment.trim().length === 0 || !$page.data.user) {
@@ -195,23 +202,37 @@
     {#if commentError}
       <ErrorBanner>{commentError}</ErrorBanner>
     {/if}
-    {#if latestComment}
+    {#if singleComment && latestComment}
       {#key latestComment}
-        <div class="flex gap-2xs mt-2xs" in:fade={{ duration: 250 }}>
-          <div class="shrink-0">
-            <Avatar user={latestComment.owner} --avatar-size={space('m')} />
-          </div>
-          <div>
-            <div class="lh-1">
-              <strong class="step--1">{latestComment.owner.name}</strong>
-              <em class="step--2 color-on-surface-faint">
-                {formatSince(latestComment.time.since)}
-              </em>
-            </div>
-            <p class="step--1 pt-3xsss">{latestComment.comment}</p>
-          </div>
+        <div in:fade={{ duration: 250 }}>
+          <Comment comment={latestComment} />
         </div>
       {/key}
+      {#if snippet.commentCount > 1}
+        <p class="flex justify-center step--1">
+          <a href="/snippet/{snippet.id}">see more comments</a>
+        </p>
+      {/if}
+    {:else if !singleComment && commentsPromise}
+      {#await commentsPromise}
+        <Loading delay={200} />
+      {:then { comments }}
+        <ul>
+          {#each comments as comment}
+            <Comment {comment} />
+            <!-- {:else} -->
+            <!-- <span class="step--1">no comments yet</span> -->
+          {/each}
+        </ul>
+      {:catch error}
+        <ErrorBanner>
+          {#if error}
+            error
+          {:else}
+            could not load comments
+          {/if}
+        </ErrorBanner>
+      {/await}
     {/if}
   </div>
 </div>

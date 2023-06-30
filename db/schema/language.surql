@@ -18,7 +18,6 @@ CREATE language:css SET name = 'CSS';
 CREATE language:html SET name = 'HTML';
 CREATE language:java SET name = 'Java';
 CREATE language:javascript SET name = 'JavaScript';
-CREATE language:json SET name = 'JSON';
 CREATE language:md SET name = 'Markdown';
 CREATE language:php SET name = 'PHP';
 CREATE language:python SET name = 'Python';

@@ -4,22 +4,6 @@ import { EditorView, keymap } from '@codemirror/view';
 import { nord } from 'cm6-theme-nord';
 import { basicSetup } from 'codemirror';
 
-// Languages
-// import { cpp } from '@codemirror/lang-cpp';
-// import { css } from '@codemirror/lang-css';
-// import { html } from '@codemirror/lang-html';
-// import { java } from '@codemirror/lang-java';
-// import { javascript } from '@codemirror/lang-javascript';
-// import { json } from '@codemirror/lang-json';
-// import { php } from '@codemirror/lang-php';
-// import { python } from '@codemirror/lang-python';
-// import { rust } from '@codemirror/lang-rust';
-// import { sass } from '@codemirror/lang-sass';
-// import { sql } from '@codemirror/lang-sql';
-// import { vue } from '@codemirror/lang-vue';
-// import { csharp } from '@replit/codemirror-lang-csharp';
-// import { svelte } from '@replit/codemirror-lang-svelte';
-
 type CodeMirrorOptions = {
   startWith: string;
   language: string;
@@ -140,9 +124,6 @@ async function getLanguageSupport(language: string) {
     case 'javascript':
       // return javascript({ jsx: true });
       return (await import('@codemirror/lang-javascript')).javascript({ jsx: true });
-    case 'json':
-      // return json();
-      return (await import('@codemirror/lang-json')).json();
     case 'markdown':
       // return markdown();
       return (await import('@codemirror/lang-markdown')).markdown();

@@ -10,7 +10,7 @@ import { surql } from '$lib/db/surreal.js';
 import { collectionSchema, type CollectionSchema } from '$lib/schema/collection.js';
 import { commentSchema } from '$lib/schema/commented.js';
 import { savedSchema } from '$lib/schema/saved.js';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 
@@ -18,9 +18,14 @@ export async function load({ locals: { auth, db }, params }) {
   const { user } = await auth.validateUser();
 
   const { snippet } = await getSnippet(db, params.snippetId);
-  if (!snippet.ok || snippet.count !== 1) throw redirect(302, '/');
+  if (!snippet.ok) {
+    throw error(500, 'something went wrong');
+  }
+  if (!snippet.result) {
+    throw error(404);
+  }
 
-  return { user, snippet: snippet.result[0] };
+  return { user, snippet: snippet.result };
 }
 
 export const actions = {
@@ -89,8 +94,8 @@ export const actions = {
     }
 
     let collection: CollectionSchema;
-    if (existingCollection.count > 0) {
-      collection = existingCollection.result[0];
+    if (existingCollection.result) {
+      collection = existingCollection.result;
     } else {
       const { collection: newCollection } = await createCollection(db, form.data.name);
 
@@ -118,19 +123,11 @@ export const actions = {
       return fail(400, { error: 'please specify a collection id' });
     }
 
-    // const [saved] = await db.query(
-    //   surql`
-    //   UPDATE saved
-    //   SET collection = type::thing('collection', ${collectionId})
-    //   WHERE in = $auth AND out = type::thing('snippet', ${params.snippetId})`,
-    //   savedSchema.array(),
-    // );
-
     const { collection } = await getCollection(db, collectionId);
     if (!collection.ok) {
       throw error(500, 'something went wrong');
     }
-    if (collection.count === 0) {
+    if (!collection.result) {
       return fail(400, { error: "that collection doesn't exist" });
     }
 
@@ -139,7 +136,7 @@ export const actions = {
       throw error(500);
     }
 
-    return { name: collection.result[0].name };
+    return { name: collection.result.name };
   },
 
   async removeCollection({ locals: { auth, db }, params }) {

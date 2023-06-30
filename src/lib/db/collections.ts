@@ -13,8 +13,12 @@ export async function getCollections(db: Surreal) {
 
 export async function getCollection(db: Surreal, collectionId: string) {
   const [collection] = await db.query(
-    surql`SELECT * FROM type::thing('collection', ${collectionId})`,
-    collectionSchema.array(),
+    surql`
+      RETURN (
+        SELECT * FROM type::thing('collection', ${collectionId})
+      )[0]
+    `,
+    collectionSchema.nullable(),
   );
 
   return { collection };
@@ -22,8 +26,12 @@ export async function getCollection(db: Surreal, collectionId: string) {
 
 export async function getCollectionByName(db: Surreal, name: string) {
   const [collection] = await db.query(
-    surql`SELECT * FROM collection WHERE name = type::string(${name})`,
-    collectionSchema.array(),
+    surql`
+      RETURN (
+        SELECT * FROM collection WHERE name = type::string(${name})
+      )[0]
+    `,
+    collectionSchema.nullable(),
   );
 
   return { collection };

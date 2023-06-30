@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import type { ComponentType, SvelteComponentTyped } from 'svelte/internal';
+  import type { ComponentType, SvelteComponent } from 'svelte';
   import { writable } from 'svelte/store';
   import { createModalContext } from './context';
 
@@ -10,7 +10,7 @@
 
   export function openModal<T extends ComponentType>(
     component: T,
-    props: T extends ComponentType<SvelteComponentTyped<infer TProps>> ? TProps : never,
+    props: T extends ComponentType<SvelteComponent<infer TProps>> ? TProps : never,
   ) {
     modalData.set({ component, props });
   }

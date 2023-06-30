@@ -1,5 +1,5 @@
 <script>
-  import ModalOutlet from '$lib/components/custom-modal/modal-outlet.svelte';
+  import ModalOutlet from '$lib/components/modal/modal-outlet.svelte';
 
   // CUBE CSS styles (import first)
   import '../styles/cube.postcss';

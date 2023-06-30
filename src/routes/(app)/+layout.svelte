@@ -31,7 +31,7 @@
   <!-- <header class="header | bg-surface-1 pt-2xs pb-xs"> -->
   <header class="header | bg-surface-1 p-3xs">
     <img src={logoSmall} alt="snipswap" />
-    <div class="small-only">
+    <div class="screen:s">
       <Button
         style="ghost"
         on:click={() => {
@@ -64,16 +64,21 @@
             {:else if path === '/snippet'}
               <i-heroicons:pencil-20-solid />
             {/if}
-            <span class="medium-and-up">{text}</span>
+            <span class="screen:m-l">{text}</span>
           </Button>
         </li>
       {/each}
       {#if $pageAction}
         <!-- <li class="page-action | small-only" transition:fly={{ y: 50 }}> -->
-        <li class="page-action | small-only" transition:slide={{ axis: 'x', duration: 200 }}>
+        <li class="page-action | screen:s" transition:slide={{ axis: 'x', duration: 200 }}>
           <Button color="accent" style="solid" on:click={$pageAction}>
-            <i-heroicons:magnifying-glass-20-solid />
-            <span class="medium-and-up">search</span>
+            {#if $page.url.pathname === '/'}
+              <i-heroicons:magnifying-glass-20-solid aria-label="toggle searchbar" />
+            {:else if $page.url.pathname === '/saved'}
+              <i-heroicons:folder-open-20-solid aria-label="toggle collections panel" />
+            {:else}
+              <i-heroicons:question-mark-circle-20-solid />
+            {/if}
           </Button>
         </li>
       {/if}
@@ -249,17 +254,6 @@
     .menu {
       border-inline-end: var(--border-dark);
     }
-  }
-
-  @media (--large-screen) {
-    /* .layout {
-      grid-template-areas:
-        'header content'
-        'nav content'
-        'menu content';
-      grid-template-rows: auto 1fr;
-      grid-template-columns: auto 1fr;
-    } */
   }
 
   .avatar {

@@ -25,6 +25,7 @@
   class:fullwidth
   {href}
   on:click
+  role={href ? 'link' : 'button'}
   {...$$restProps}
 >
   <span class="flex align-center" style:visibility={loading ? 'hidden' : 'visible'}>
@@ -35,7 +36,7 @@
   </span> -->
   <span style:display={loading ? 'block' : 'none'}>
     <!-- <span style:visibility={loading ? 'visible' : 'hidden'}> -->
-    <Loading delay={5} />
+    <Loading delay={100} />
   </span>
 </svelte:element>
 
@@ -102,11 +103,12 @@
       background-color: rgb(0 0 0 / 0.2);
       /* color: var(--on-accent); */
       /* --button-border-color: var(--accent-0); */
+    }
 
-      /* [data-style='outlined'] {
-        background-color: var(--surface-0);
-        color: var(--on-surface);
-      } */
+    &[data-style='outlined'] {
+      /* background-color: var(--surface-0); */
+      /* color: var(--on-surface); */
+      --button-border-color: var(--surface-3);
     }
   }
 

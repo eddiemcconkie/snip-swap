@@ -3,16 +3,7 @@ import type { Get } from '$lib/fetch/get.js';
 import { error, json } from '@sveltejs/kit';
 
 export async function GET(event) {
-  // const db = connect(event.locals.surrealToken);
-  // const [snippets] = await db.query(
-  //   surql`
-  //     SELECT VALUE ->saved[WHERE collection = type::string(${event.params.id})]->snippet AS snippets
-  //     FROM $auth
-  //     FETCH snippets
-  //   `,
-  //   snippetFetchAll.array(),
-  // );
-  const { snippets } = await getCollectionSnippets(event.locals.db, event.params.id);
+  const { snippets } = await getCollectionSnippets(event.locals.db, event.params.collectionId);
 
   if (!snippets.ok) {
     throw error(500, snippets.error);

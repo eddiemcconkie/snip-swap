@@ -1,7 +1,11 @@
+import { userSchema } from '$lib/schema/auth';
 import { collectionSchema } from '$lib/schema/collection';
+import { commentSchema } from '$lib/schema/commented';
+import { record } from '$lib/schema/id';
+import { languageSchema } from '$lib/schema/language';
 import { snippetSchema } from '$lib/schema/snippet';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { z } from 'zod';
+import { z } from 'zod';
 import { appendSearchParameters, parseUrl } from '.';
 
 type GetRoutesShape = Record<
@@ -26,6 +30,22 @@ const getRoutes = {
     search: [],
     returns: {
       snippets: snippetSchema.array(),
+    },
+  },
+  '/api/public/snippet/[snippetId]/comments': {
+    params: ['snippetId'],
+    search: [],
+    returns: {
+      comments: commentSchema.array(),
+    },
+  },
+  '/api/public/search': {
+    params: [],
+    search: ['q'],
+    returns: {
+      languages: languageSchema.array(),
+      users: userSchema.array(),
+      snippets: snippetSchema.merge(z.object({ collection: record() })).array(),
     },
   },
 } as const satisfies GetRoutesShape;
@@ -54,6 +74,7 @@ export async function get<T extends GetRoute>(
 ) {
   let url = parseUrl(route, params);
   url = appendSearchParameters(url, search);
+
   const response = await fetch(url);
   return (await response.json()) as GetWithId<typeof route>;
 }

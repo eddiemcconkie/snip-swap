@@ -48,21 +48,31 @@ type SchemaResults<TSchemas extends z.ZodTypeAny[]> = {
   [Index in keyof TSchemas]: Response<z.infer<TSchemas[Index]>>;
 };
 
-type SurQL = {
-  query: string;
-  params: Record<string, string>;
-};
+// type SurQL = {
+//   query: string;
+//   params: Record<string, string>;
+// };
+export class SurQL {
+  private brand = 'SurQL';
+  constructor(readonly query: string, readonly params: Record<string, string>) {}
+}
 
-export const surql = (strings: TemplateStringsArray, ...args: unknown[]): SurQL => {
+export function surql(strings: TemplateStringsArray, ...args: unknown[]): SurQL {
   let query = strings[0];
-  const params: Record<string, string> = {};
+  let params: Record<string, string> = {};
   args.forEach((value, i) => {
-    const paramName = `_${i}`;
-    query = query.concat('$', paramName, strings[i + 1]);
-    params[paramName] = JSON.stringify(value);
+    if (value instanceof SurQL) {
+      query = query.concat(value.query, strings[i + 1]);
+      params = { ...params, ...value.params };
+    } else {
+      const id = crypto.randomUUID().replaceAll('-', '').slice(0, 6);
+      const paramName = `_${id}`;
+      query = query.concat('$', paramName, strings[i + 1]);
+      params[paramName] = JSON.stringify(value);
+    }
   });
-  return { query, params };
-};
+  return new SurQL(query, params);
+}
 
 export class Surreal {
   private authorization = '';
@@ -118,7 +128,6 @@ export class Surreal {
 
     // RestResponseError
     if (!Array.isArray(responses)) {
-      console.log(responses);
       throw new Error('SurrealDB error');
     }
 
@@ -137,6 +146,20 @@ export class Surreal {
             }
           : { ok: false, error: response.detail, time: response.time },
     ) as any;
+  }
+
+  async queryDebug(...args: Parameters<typeof this.query>): ReturnType<typeof this.query> {
+    const [surql, ...schemas] = args;
+    console.group('DEBUG');
+    for (const line of surql.query.split('\n')) {
+      console.log(line);
+    }
+    console.log();
+    console.log('params:', surql.params);
+    console.log();
+    console.groupEnd();
+
+    return await this.query(...args);
   }
 }
 
