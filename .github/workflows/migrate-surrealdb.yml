@@ -37,7 +37,7 @@ jobs:
           PUBLIC_SURREAL_HOST: ${{ secrets.PUBLIC_SURREAL_HOST }}
           PUBLIC_SURREAL_NS: ${{ secrets.PUBLIC_SURREAL_NS }}
           PUBLIC_SURREAL_DB: ${{ secrets.PUBLIC_SURREAL_DB }}
-          PUBLIC_SURREAL_USER: ${{ secrets.SURREAL_USER }}
-          PUBLIC_SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
+          SURREAL_USER: ${{ secrets.SURREAL_USER }}
+          SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
         run: pnpm run db:import-all
         working-directory: ./app
