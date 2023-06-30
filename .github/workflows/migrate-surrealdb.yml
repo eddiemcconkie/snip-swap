@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'app/**'
 
 jobs:
   build:
@@ -24,6 +26,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+        working-directory: ./app
 
       - name: Run script
         env:
@@ -33,3 +36,4 @@ jobs:
           PUBLIC_SURREAL_USER: ${{ secrets.SURREAL_USER }}
           PUBLIC_SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
         run: pnpm run db:import-all
+        working-directory: ./app
