@@ -4,7 +4,7 @@
   export let redirectTo: string | null = null;
 </script>
 
-<form method="POST">
+<form method="post">
   <slot />
   <button type="submit" formaction="/signin?/github&redirectTo={redirectTo ?? $page.url.pathname}">
     sign in with GitHub

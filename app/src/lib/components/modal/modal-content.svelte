@@ -1,9 +1,3 @@
-<div class="p-s">
+<div class="p-s scroll-y">
   <slot />
 </div>
-
-<style>
-  div {
-    overflow-y: auto;
-  }
-</style>

@@ -4,7 +4,10 @@
   import Button from '$lib/components/button.svelte';
   import ErrorBanner from '$lib/components/error-banner.svelte';
   import LanguageIcon from '$lib/components/language-icon.svelte';
+  import ScrollContainer from '$lib/components/layout/scroll-container.svelte';
+  import SidebarSection from '$lib/components/layout/sidebar-section.svelte';
   import SplitLayout from '$lib/components/layout/split-layout.svelte';
+  import WrapRows from '$lib/components/layout/wrap-rows.svelte';
   import Loading from '$lib/components/loading.svelte';
   import Snippet from '$lib/components/snippet.svelte';
   import { setPageAction } from '$lib/context/page-action.js';
@@ -64,13 +67,11 @@
   </svelte:fragment>
 
   <svelte:fragment slot="main">
-    <div class="snippet-container | pt-s pb-l flex column gap-s">
+    <ScrollContainer class="flex column gap-xl">
       {#each data.snippets as snippet (snippet.id)}
-        <div class="mb-l">
-          <Snippet {snippet} singleComment latestComment={snippet.latestComment} />
-        </div>
+        <Snippet {snippet} comments={snippet.latestComment ? [snippet.latestComment] : []} />
       {/each}
-    </div>
+    </ScrollContainer>
   </svelte:fragment>
 
   <svelte:fragment slot="sidebar">
@@ -99,41 +100,44 @@
       {:else if $searchResults.data}
         {@const { languages, users, snippets } = $searchResults.data}
         {#if languages.length > 0 || $query.length === 0}
-          <p class="mb-2xs"><strong>languages</strong></p>
-          <ul class="step--1 mb-m flex wrap gap-2xs">
-            {#each languages.length > 0 ? languages : allLanguages as language}
-              <li>
-                <Button
-                  color="surface"
-                  style="outlined"
-                  type="submit"
-                  name="language"
-                  value={language.id}
-                >
-                  <LanguageIcon language={language.id} />
-                  {language.name}
-                </Button>
-              </li>
-            {/each}
-          </ul>
+          <SidebarSection title="languages">
+            <WrapRows items={languages.length > 0 ? languages : allLanguages} let:item={language}>
+              <Button
+                color="surface"
+                style="outlined"
+                type="submit"
+                name="language"
+                value={language.id}
+              >
+                <LanguageIcon language={language.id} />
+                <span>{language.name}</span>
+              </Button>
+            </WrapRows>
+          </SidebarSection>
         {/if}
         {#if users.length > 0}
-          <p class="mb-2xs"><strong>users</strong></p>
-          <ul class="step--1 mb-m flex wrap gap-2xs">
-            {#each users as user}
-              <li>
-                <Button color="surface" style="outlined" type="submit" name="user" value={user.id}>
-                  <Avatar {user} --avatar-size={space('m')} />
-                  <span class="flex column align-start">
-                    <span> {user.name} </span>
-                    <span class="step--2 color-on-surface-faint"> @{user.username} </span>
-                  </span>
-                </Button>
-              </li>
-            {/each}
-          </ul>
+          <SidebarSection title="users">
+            <WrapRows items={users} let:item={user}>
+              <Button color="surface" style="outlined" type="submit" name="user" value={user.id}>
+                <Avatar {user} --avatar-size={space('m')} />
+                <span class="flex column align-start">
+                  <span> {user.name} </span>
+                  <span class="step--2 color-on-surface-faint"> @{user.username} </span>
+                </span>
+              </Button>
+            </WrapRows>
+          </SidebarSection>
         {/if}
         {#if snippets.length > 0}
+          <SidebarSection title="snippets">
+            <ul>
+              {#each snippets as snippet}
+                <li>
+                  {snippet.code}
+                </li>
+              {/each}
+            </ul>
+          </SidebarSection>
           <p class="mb-2xs"><strong>snippets</strong></p>
           <ul class="step--1 mb-m">
             {#each snippets as snippet}
@@ -161,13 +165,5 @@
     align-items: start;
     padding: var(--space-s);
     gap: var(--space-s);
-  }
-
-  .snippet-container {
-    @media (--medium-screen) {
-      margin-inline: auto;
-      max-width: 45rem;
-      width: calc(100% - var(--space-m));
-    }
   }
 </style>

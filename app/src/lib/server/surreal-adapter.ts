@@ -123,6 +123,7 @@ export const surrealdb =
           keySchema.array(),
         );
         if (!newKey.ok) {
+          console.log(newKey.error);
           throw new LuciaError('AUTH_DUPLICATE_KEY_ID');
         } else if (newUser.ok && newUser.count === 1) {
           return newUser.result[0];

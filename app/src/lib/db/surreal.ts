@@ -31,7 +31,7 @@ type Auth =
       token: string;
     };
 
-type Response<T> =
+export type Response<T> =
   | {
       ok: true;
       result: T;

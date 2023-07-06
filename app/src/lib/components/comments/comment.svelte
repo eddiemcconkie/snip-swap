@@ -2,7 +2,7 @@
   import { space } from '$lib/helpers/css-vars';
   import { formatSince } from '$lib/helpers/since';
   import type { CommentSchema } from '$lib/schema/commented';
-  import Avatar from './avatar.svelte';
+  import Avatar from '../avatar.svelte';
 
   export let comment: CommentSchema;
 </script>

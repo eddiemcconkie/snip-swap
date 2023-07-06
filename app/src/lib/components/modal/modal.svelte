@@ -29,6 +29,6 @@
     /* background: radial-gradient(farthest-corner at center, #111945, rgb(0 0 0 / 0.3)); */
   }
   dialog > :global(form) {
-    display: contents;
+    /* display: contents; */
   }
 </style>

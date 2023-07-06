@@ -11,10 +11,9 @@
 />
 
 <div class="split-layout | full-height" data-sidebar={sidebarOpen ? 'open' : 'closed'}>
-  <!-- <main class="px-s"> -->
   <main class="full-height">
     <div class="main-header | bg-surface-0 border-dark-b"><slot name="main-header" /></div>
-    <div class="main-content"><slot name="main" /></div>
+    <slot name="main" />
   </main>
 
   <aside class="bg-surface-1 p-2xs-xs">
@@ -22,7 +21,6 @@
   </aside>
 
   <div class="screen:m | fab step-1">
-    <!-- <div class="medium-screen-only | fab step-1"> -->
     <Button color="accent" style="solid" on:click={() => (sidebarOpen = !sidebarOpen)}>
       <slot name="fab-icon" />
     </Button>
@@ -50,9 +48,6 @@
   }
   .main-header:empty {
     display: contents;
-  }
-  .main-content {
-    overflow-y: auto;
   }
 
   aside {

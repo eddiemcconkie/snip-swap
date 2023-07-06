@@ -28,7 +28,7 @@ const signIn = async (signin: Signin) => {
   const url = new URL(`${PUBLIC_SURREAL_HOST}/signin`);
 
   const response = await fetch(url, {
-    method: 'POST',
+    method: 'post',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',

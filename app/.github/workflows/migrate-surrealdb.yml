@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./app
+        # working-directory: ./app
 
       - name: Run script
         env:
@@ -40,4 +40,8 @@ jobs:
           SURREAL_USER: ${{ secrets.SURREAL_USER }}
           SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
         run: pnpm run db:import-all
-        working-directory: ./app
+        # working-directory: ./app
+
+      - name: Cleanup
+        if: failure()
+        run: |

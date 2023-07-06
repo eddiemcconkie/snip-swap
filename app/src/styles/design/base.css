@@ -24,7 +24,8 @@ button {
   cursor: pointer;
 }
 
-input[type='text'] {
+input[type='text'],
+textarea {
   border: 0;
   border-radius: 100vw;
   background-color: var(--surface-3);
@@ -32,6 +33,11 @@ input[type='text'] {
   padding-inline: var(--space-xs);
   padding-block: var(--space-3xs);
   width: 100%;
+}
+textarea {
+  border-radius: 1em;
+  resize: vertical;
+  min-height: var(--space-3xl);
 }
 ::placeholder {
   color: var(--light-4);

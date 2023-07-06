@@ -8,6 +8,6 @@
 <SigninPrompt {redirectTo}>
   <p>sign in to snip swap!</p>
 </SigninPrompt>
-<!-- <form method="POST">
+<!-- <form method="post">
   <button type="submit" formaction="?/github&redirectTo={redirectTo}"> Sign in with GitHub </button>
 </form> -->

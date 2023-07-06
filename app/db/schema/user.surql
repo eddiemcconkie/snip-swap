@@ -25,7 +25,9 @@ DEFINE FIELD joined ON auth_user
 DEFINE SCOPE user SESSION 30d
   SIGNIN (SELECT VALUE user_id.* FROM type::thing('auth_session', $sessionId))
 ;
-CREATE user:public;
+
+DEFINE TABLE public_user;
+UPDATE public_user:public;
 DEFINE SCOPE public SESSION 30d
-  SIGNIN (SELECT * FROM user:public)
+  SIGNIN (SELECT * FROM public_user:public)
 ;

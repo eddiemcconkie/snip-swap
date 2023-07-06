@@ -84,7 +84,7 @@
       {/if}
     </ul>
   </nav>
-  <div class="menu | bg-surface-1 p-xs" data-open={menuOpen}>
+  <div class="menu | bg-surface-1 p-xs scroll-y" data-open={menuOpen}>
     <ul>
       {#if $page.data.user}
         <li>
@@ -101,13 +101,13 @@
         </li>
         <li>
           <Button href="/">
-            <i-heroicons:cog-20-solid />
+            <span class="i-logos:visual-studio-code?mask" />
             extension
           </Button>
         </li>
         <li>
-          <Button href="/">
-            <i-heroicons:exclamation-triangle-20-solid />
+          <Button href="https://github.com/eddiemcconkie/snip-swap/issues" external>
+            <span class="i-logos:github-icon?mask" />
             report an issue
           </Button>
         </li>
@@ -143,7 +143,6 @@
   }
 
   .menu {
-    overflow-y: auto;
     position: relative;
     z-index: 9999;
     grid-area: 2 / 1 / -1 / -1; /* Covers content and nav */
@@ -197,10 +196,6 @@
     scale: 1.15;
   }
 
-  .medium-and-up {
-    display: none;
-  }
-
   @media (--medium-screen) {
     .layout {
       grid-template-areas:
@@ -240,13 +235,6 @@
     .current-page,
     .page-action {
       scale: 1;
-    }
-
-    .small-only {
-      display: none;
-    }
-    .medium-and-up {
-      display: block;
     }
 
     .header,

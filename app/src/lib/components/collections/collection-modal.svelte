@@ -20,7 +20,7 @@
 
   export let currentCollection: CollectionSchema | null;
 
-  export let onSubmit = (value: string | null) => {};
+  export let onSubmit = (collection: CollectionSchema | null) => {};
 
   const { modalDialog } = getModalContext();
 
@@ -50,61 +50,59 @@
     });
   }
 
-  const handleSubmit: SubmitFunction = ({ action }) => {
+  const handleAddToCollection: SubmitFunction = () => {
     errorMessage = '';
-    if (
-      action.searchParams.has('/addToNewCollection') ||
-      action.searchParams.has('/addToCollection')
-    ) {
-      isCreateButtonLoading = true;
 
-      return ({ result }) => {
-        isCreateButtonLoading = false;
+    isCreateButtonLoading = true;
 
-        switch (result.type) {
-          case 'failure':
-            errorMessage = result.data?.error ?? 'failure';
-            return;
-          case 'error':
-            errorMessage = result.error;
-            return;
-          case 'success':
-            onSubmit(result.data?.name);
-            $modalDialog.close();
-        }
-      };
-    } else if (action.searchParams.has('/removeCollection')) {
-      isRemoveButtonLoading = true;
+    return ({ result }) => {
+      isCreateButtonLoading = false;
 
-      return ({ result }) => {
-        isRemoveButtonLoading = false;
+      switch (result.type) {
+        case 'failure':
+          errorMessage = result.data?.error ?? 'failure';
+          return;
+        case 'error':
+          errorMessage = result.error;
+          return;
+        case 'success':
+          onSubmit(result.data?.collection);
+          $modalDialog.close();
+      }
+    };
+  };
 
-        switch (result.type) {
-          case 'failure':
-            errorMessage = result.data?.error ?? 'failure';
-            return;
-          case 'error':
-            errorMessage = result.error;
-            return;
-          case 'success':
-            onSubmit(null);
-            $modalDialog.close();
-        }
-      };
-    }
+  const handleRemoveCollection: SubmitFunction = () => {
+    isRemoveButtonLoading = true;
+
+    return ({ result }) => {
+      isRemoveButtonLoading = false;
+
+      switch (result.type) {
+        case 'failure':
+          errorMessage = result.data?.error ?? 'failure';
+          return;
+        case 'error':
+          errorMessage = result.error;
+          return;
+        case 'success':
+          onSubmit(null);
+          $modalDialog.close();
+      }
+    };
   };
 </script>
 
 <Modal>
-  <form method="post" use:enhance={handleSubmit}>
-    <ModalHeader>
-      {#if currentCollection}
-        switch collections
-      {:else}
-        add snippet to a collection
-      {/if}
-    </ModalHeader>
-    <ModalContent>
+  <ModalHeader>
+    {#if currentCollection}
+      switch collections
+    {:else}
+      add snippet to a collection
+    {/if}
+  </ModalHeader>
+  <ModalContent>
+    <form method="post" use:enhance={handleAddToCollection}>
       {#await collectionsResponse}
         <Loading delay={200} />
       {:then { collections }}
@@ -160,19 +158,25 @@
       {:catch error}
         <p>{error}</p>
       {/await}
-    </ModalContent>
-    <ModalFooter>
+    </form>
+  </ModalContent>
+  <ModalFooter>
+    <form method="post" use:enhance={handleRemoveCollection} class="display-contents">
       {#if currentCollection}
-        <Button type="submit" formaction="/snippet/{snippetId}?/removeCollection">
+        <Button
+          type="submit"
+          formaction="/snippet/{snippetId}?/removeCollection"
+          loading={isRemoveButtonLoading}
+        >
           <i-heroicons:arrow-uturn-left-20-solid /> no collection
         </Button>
       {:else}
         <ModalCancelButton />
       {/if}
-    </ModalFooter>
-    <!-- <ModalFooter>
+    </form>
+  </ModalFooter>
+  <!-- <ModalFooter>
       <ModalCancelButton />
       <ModalSubmitButton />
     </ModalFooter> -->
-  </form>
 </Modal>

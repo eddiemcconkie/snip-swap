@@ -33,7 +33,7 @@ export const actions = {
     const { session } = await auth.validateUser();
     if (!session) throw error(403);
 
-    await db.query(
+    const [$snippet, relation] = await db.query(
       surql`
       BEGIN;
       LET $snippet = (SELECT * FROM type::thing('snippet', ${params.snippetId}));
@@ -43,6 +43,10 @@ export const actions = {
       z.null(),
       savedSchema.array(),
     );
+
+    if (!relation.ok) {
+      throw error(500, 'could not save');
+    }
   },
 
   async unsave({ locals: { auth, db }, params }) {
@@ -54,8 +58,9 @@ export const actions = {
         BEGIN;
 
         DELETE saved
-        WHERE in = $auth
-          AND out = type::thing('snippet', ${params.snippetId});
+        WHERE out = type::thing('snippet', ${params.snippetId});
+        --in = $auth
+          --AND 
 
         IF fn::record_exists('snippet', ${params.snippetId}) = false THEN
           (CREATE cancel)
@@ -99,7 +104,7 @@ export const actions = {
     } else {
       const { collection: newCollection } = await createCollection(db, form.data.name);
 
-      if (!newCollection.ok) {
+      if (!newCollection.ok || newCollection.count !== 1) {
         throw error(500, 'something went wrong');
       }
       collection = newCollection.result[0];
@@ -110,7 +115,7 @@ export const actions = {
       throw error(500);
     }
 
-    return { name: collection.name };
+    return { collection };
   },
 
   async addToCollection({ locals: { auth, db }, params, url }) {
@@ -136,7 +141,8 @@ export const actions = {
       throw error(500);
     }
 
-    return { name: collection.result.name };
+    // return { name: collection.result.name };
+    return { collection: collection.result };
   },
 
   async removeCollection({ locals: { auth, db }, params }) {
@@ -170,6 +176,6 @@ export const actions = {
       throw error(500, 'something went wrong');
     }
 
-    return { comment: comment.result[0] };
+    return { comment: comment.result! };
   },
 };

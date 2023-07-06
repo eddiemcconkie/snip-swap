@@ -12,18 +12,18 @@ DEFINE FIELD name ON language
 ;
 
 -- Needs to match '/src/lib/schema/language.ts'
-CREATE language:cpp SET name = 'C++';
-CREATE language:csharp SET name = 'C#';
-CREATE language:css SET name = 'CSS';
-CREATE language:html SET name = 'HTML';
-CREATE language:java SET name = 'Java';
-CREATE language:javascript SET name = 'JavaScript';
-CREATE language:md SET name = 'Markdown';
-CREATE language:php SET name = 'PHP';
-CREATE language:python SET name = 'Python';
-CREATE language:rust SET name = 'Rust';
-CREATE language:scss SET name = 'SCSS';
-CREATE language:svelte SET name = 'Svelte';
-CREATE language:sql SET name = 'SQL';
-CREATE language:typescript SET name = 'TypeScript';
-CREATE language:vue SET name = 'Vue';
+UPDATE language:cpp SET name = 'C++';
+UPDATE language:csharp SET name = 'C#';
+UPDATE language:css SET name = 'CSS';
+UPDATE language:html SET name = 'HTML';
+UPDATE language:java SET name = 'Java';
+UPDATE language:javascript SET name = 'JavaScript';
+UPDATE language:md SET name = 'Markdown';
+UPDATE language:php SET name = 'PHP';
+UPDATE language:python SET name = 'Python';
+UPDATE language:rust SET name = 'Rust';
+UPDATE language:scss SET name = 'SCSS';
+UPDATE language:svelte SET name = 'Svelte';
+UPDATE language:sql SET name = 'SQL';
+UPDATE language:typescript SET name = 'TypeScript';
+UPDATE language:vue SET name = 'Vue';

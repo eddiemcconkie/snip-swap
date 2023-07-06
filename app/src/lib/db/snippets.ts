@@ -62,10 +62,10 @@ export async function addCommentToSnippet(db: Surreal, snippetId: string, commen
         LET $comment = (
           RELATE $auth->commented->$snippet SET comment = type::string(${comment})
         );
-        RETURN (SELECT * FROM $comment FETCH owner);
+        RETURN (SELECT * FROM $comment FETCH owner)[0];
       }
     `,
-    commentSchema.array(),
+    commentSchema.nullable(),
   );
 
   return { comment: newComment };

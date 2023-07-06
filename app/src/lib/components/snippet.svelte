@@ -1,26 +1,28 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
-  import { get } from '$lib/fetch/get';
   import { space } from '$lib/helpers/css-vars';
   import { formatSince } from '$lib/helpers/since';
+  import type { CollectionSchema } from '$lib/schema/collection';
   import type { SimpleComment } from '$lib/schema/commented';
   import type { SnippetSchema } from '$lib/schema/snippet';
   import type { SubmitFunction } from '@sveltejs/kit';
+  import { createEventDispatcher } from 'svelte';
   import { fade, slide } from 'svelte/transition';
   import Avatar from './avatar.svelte';
   import Button from './button.svelte';
   import ReadonlyCodeBlock from './code/readonly-code-block.svelte';
   import CollectionModal from './collections/collection-modal.svelte';
-  import Comment from './comment.svelte';
-  import ErrorBanner from './error-banner.svelte';
+  import CommentInput from './comments/comment-input.svelte';
+  import CommentLoader from './comments/comment-loader.svelte';
+  import CommentModal from './comments/comment-modal.svelte';
+  import Comment from './comments/comment.svelte';
   import LanguageIcon from './language-icon.svelte';
-  import Loading from './loading.svelte';
   import { openModal } from './modal/modal-outlet.svelte';
 
   export let snippet: SnippetSchema;
 
-  let comment = '';
+  const dispatch = createEventDispatcher<{ 'set-collection': CollectionSchema | null }>();
 
   const handleSaveUnsave: SubmitFunction = ({ action }) => {
     if (!$page.data.user) {
@@ -29,6 +31,16 @@
     snippet.saved = !snippet.saved;
     snippet.saveCount += snippet.saved ? 1 : -1;
 
+    if (action.searchParams.has('/save')) {
+      return async ({ result }) => {
+        if (result.type === 'error') {
+          console.log(result.error);
+          snippet.saved = false;
+          snippet.saveCount--;
+        }
+      };
+    }
+
     if (action.searchParams.has('/unsave')) {
       // Undo if unsaving fails
       return async ({ result }) => {
@@ -36,46 +48,16 @@
           console.log(result.error);
           snippet.saved = true;
           snippet.saveCount++;
+        } else if (result.type === 'success') {
+          snippet.collection = null;
         }
       };
     }
   };
 
-  export let singleComment = false;
-  export let latestComment: SimpleComment | null = null;
-  let commentError = '';
+  export let comments: SimpleComment[] | 'all' = [];
 
-  let commentsPromise = singleComment
-    ? null
-    : get('/api/public/snippet/[snippetId]/comments', { snippetId: snippet.id });
-
-  const handleComment: SubmitFunction = ({ cancel }) => {
-    if (comment.trim().length === 0 || !$page.data.user) {
-      cancel();
-    }
-    commentError = '';
-
-    // const oldHighlighted = snippet.highlightedComment
-
-    return async ({ result, update }) => {
-      switch (result.type) {
-        case 'error':
-        case 'redirect':
-          await update();
-          return;
-
-        case 'failure':
-          commentError = result.data?.error;
-          return;
-
-        case 'success':
-          const newComment: SimpleComment = result.data!.comment;
-          latestComment = newComment;
-          comment = '';
-          snippet.commentCount++;
-      }
-    };
-  };
+  let newComments: SimpleComment[] = [];
 </script>
 
 <div class="snippet">
@@ -119,51 +101,50 @@
         <span>&nbsp;{snippet.saveCount}</span>
       </div>
     </div>
-    <div class="snippet-footer__actions | flex wrap justify-end gap-xs pr-xs py-2xs">
-      <form method="post" use:enhance={handleSaveUnsave}>
-        <Button
-          type="submit"
-          color="accent"
-          style={snippet.saved ? 'solid' : 'outlined'}
-          formaction="/snippet/{snippet.id}?/{snippet.saved ? 'unsave' : 'save'}"
-        >
-          <i-heroicons:bookmark-20-solid />
-          {#if !snippet.saved}
-            <span transition:slide={{ axis: 'x', duration: 100 }}>save</span>
-          {/if}
-        </Button>
-      </form>
-      {#if snippet.saved}
-        <div transition:slide={{ axis: 'x', duration: 100 }}>
+    {#if !snippet.mine}
+      <div class="snippet-footer__actions | flex wrap justify-end gap-xs pr-xs py-2xs">
+        <form method="post" use:enhance={handleSaveUnsave}>
           <Button
-            type="button"
+            type="submit"
             color="accent"
-            class="truncate"
-            style={snippet.collection ? 'solid' : 'outlined'}
-            on:click={() => {
-              openModal(CollectionModal, {
-                snippetId: snippet.id,
-                currentCollection: snippet.collection,
-                onSubmit(value) {
-                  if (value) {
-                    snippet.collection = { name: value, id: '', owner: '' };
-                  } else {
-                    snippet.collection = null;
-                  }
-                },
-              });
-            }}
+            style={snippet.saved ? 'solid' : 'outlined'}
+            formaction="/snippet/{snippet.id}?/{snippet.saved ? 'unsave' : 'save'}"
           >
-            {#if snippet.collection}
-              {snippet.collection.name}
-            {:else}
-              <i-heroicons:plus-20-solid />
-              collection
+            <i-heroicons:bookmark-20-solid />
+            {#if !snippet.saved}
+              <span transition:slide={{ axis: 'x', duration: 100 }}>save</span>
             {/if}
           </Button>
-        </div>
-      {/if}
-    </div>
+        </form>
+        {#if snippet.saved}
+          <div transition:slide={{ axis: 'x', duration: 100 }}>
+            <Button
+              type="button"
+              color="accent"
+              class="truncate"
+              style={snippet.collection ? 'solid' : 'outlined'}
+              on:click={() => {
+                openModal(CollectionModal, {
+                  snippetId: snippet.id,
+                  currentCollection: snippet.collection,
+                  onSubmit(value) {
+                    snippet.collection = value;
+                    dispatch('set-collection', value);
+                  },
+                });
+              }}
+            >
+              {#if snippet.collection}
+                {snippet.collection.name}
+              {:else}
+                <i-heroicons:plus-20-solid />
+                collection
+              {/if}
+            </Button>
+          </div>
+        {/if}
+      </div>
+    {/if}
     {#if snippet.description}
       <p class="snippet-footer__description | step--1 bg-surface-1 px-xs py-2xs border-dark-t">
         {snippet.description}
@@ -172,76 +153,48 @@
   </div>
 
   <div class="snippet-comments border-dark-t">
-    <div class="flex align-center gap-2xs-xs py-2xs">
-      {#if $page.data.user}
-        <Avatar user={$page.data.user} --avatar-size={space('m')} />
-      {:else}{/if}
-      <form
-        method="post"
-        class="snippet-comments__reply | flex gap-2xs step--1 radius-round bg-surface-3 grow"
-        use:enhance={handleComment}
-      >
-        <input
-          type="text"
-          name="comment"
-          bind:value={comment}
-          min="1"
-          aria-label="write comment"
-          placeholder="reply..."
-          autocomplete="off"
-        />
-        <Button
-          style="solid"
-          color={comment.trim().length > 0 ? 'accent' : 'surface'}
-          type="submit"
-          formaction="/snippet/{snippet.id}?/addComment"
-          aria-label="post comment"
-        >
-          <i-heroicons:paper-airplane-20-solid />
-        </Button>
-      </form>
-    </div>
-    {#if commentError}
-      <ErrorBanner>{commentError}</ErrorBanner>
-    {/if}
-    {#if singleComment && latestComment}
-      {#key latestComment}
+    <CommentInput
+      snippetId={snippet.id}
+      on:comment={({ detail: newComment }) => {
+        snippet.commentCount++;
+        newComments = [newComment, ...newComments];
+      }}
+    />
+    {#if comments === 'all'}
+      <CommentLoader snippetId={snippet.id} />
+    {:else}
+      {@const allComments = [...newComments, ...comments]}
+      {#each allComments as comment (comment.id)}
         <div in:fade={{ duration: 250 }}>
-          <Comment comment={latestComment} />
+          <Comment {comment} />
         </div>
-      {/key}
-      {#if snippet.commentCount > 1}
+      {/each}
+      {#if snippet.commentCount > allComments.length}
         <p class="flex justify-center step--1">
-          <a href="/snippet/{snippet.id}">see more comments</a>
+          <a
+            href="/snippet/{snippet.id}"
+            on:click={(e) => {
+              if (!e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                openModal(CommentModal, {
+                  snippetId: snippet.id,
+                  onComment(newComment) {
+                    snippet.commentCount++;
+                    newComments = [newComment, ...newComments];
+                  },
+                });
+              }
+            }}
+          >
+            see all comments
+          </a>
         </p>
       {/if}
-    {:else if !singleComment && commentsPromise}
-      {#await commentsPromise}
-        <Loading delay={200} />
-      {:then { comments }}
-        <ul>
-          {#each comments as comment}
-            <Comment {comment} />
-            <!-- {:else} -->
-            <!-- <span class="step--1">no comments yet</span> -->
-          {/each}
-        </ul>
-      {:catch error}
-        <ErrorBanner>
-          {#if error}
-            error
-          {:else}
-            could not load comments
-          {/if}
-        </ErrorBanner>
-      {/await}
     {/if}
   </div>
 </div>
 
 <style lang="postcss">
-  @import '/src/styles/breakpoints.postcss';
-
   .snippet-header {
     display: grid;
     grid-template-columns: auto 1fr;
@@ -298,10 +251,6 @@
 
   .snippet-comments {
     padding-inline: var(--space-2xs);
-
-    /* @media (--medium-screen) {
-      padding-inline: 0;
-    } */
   }
 
   .snippet-header::before,

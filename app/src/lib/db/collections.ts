@@ -86,7 +86,8 @@ export async function removeSnippetFromCollection(db: Surreal, snippetId: string
     SELECT * FROM (
       UPDATE saved
       SET collection = NONE
-      WHERE in = $auth AND out = type::thing('snippet', ${snippetId})
+      WHERE --in = $auth AND 
+      out = type::thing('snippet', ${snippetId})
     )
     `,
     savedSchema.array(),

@@ -9,6 +9,8 @@
 
   export let href: string | null = null;
 
+  export let external = false;
+
   export let fullwidth = false;
 
   export let loading = false;
@@ -23,6 +25,8 @@
   data-color={color}
   data-style={style}
   class:fullwidth
+  target={external ? '_blank' : null}
+  rel={external ? 'noreferrer' : null}
   {href}
   on:click
   role={href ? 'link' : 'button'}
@@ -30,6 +34,9 @@
 >
   <span class="flex align-center" style:visibility={loading ? 'hidden' : 'visible'}>
     <slot />
+    <!-- {#if external}
+      <i-heroicons:arrow-top-right-on-square-20-solid style:font-size="0.8em" class="shrink-0" />
+    {/if} -->
   </span>
   <!-- <span class="flex justify-center align-center" style:visibility={loading ? 'visible' : 'hidden'}>
     <i-svg-spinners:6-dots-scale-middle />
