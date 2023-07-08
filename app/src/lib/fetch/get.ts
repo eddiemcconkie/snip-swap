@@ -1,9 +1,11 @@
-import { userSchema } from '$lib/schema/auth';
-import { collectionSchema } from '$lib/schema/collection';
-import { commentSchema } from '$lib/schema/commented';
-import { record } from '$lib/schema/id';
-import { languageSchema } from '$lib/schema/language';
-import { snippetSchema } from '$lib/schema/snippet';
+import {
+  collectionSchema,
+  commentSchema,
+  languageSchema,
+  record,
+  snippetSchema,
+  userSchema,
+} from '@snipswap/schema';
 import type { RequestEvent } from '@sveltejs/kit';
 import { z } from 'zod';
 import { appendSearchParameters, parseUrl } from '.';

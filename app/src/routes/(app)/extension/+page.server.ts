@@ -1,6 +1,6 @@
-import { surql } from '$lib/db/surreal.js';
-import { connectRoot } from '$lib/db/surreal.server.js';
-import { apiKeySchema } from '$lib/schema/api-key.js';
+import { connectRoot } from '$lib/surreal.server.js';
+import { apiKeySchema } from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import { error } from '@sveltejs/kit';
 
 export async function load({ locals: { auth, db } }) {

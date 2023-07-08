@@ -1,4 +1,4 @@
-import { collectionSchema } from '$lib/schema/collection';
+import { collectionSchema } from '@snipswap/schema';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { z } from 'zod';
 import { parseUrl } from '.';
@@ -15,7 +15,7 @@ type PostRoutesShape = Record<
 const postRoutes = {
   '/api/collection': {
     params: [],
-    body: collectionSchema.pick({ name: true }),
+    body: collectionSchema,
     returns: {
       collection: collectionSchema,
     },

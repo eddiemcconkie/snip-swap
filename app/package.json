@@ -63,6 +63,8 @@
     "@lucia-auth/oauth": "^1.2.1",
     "@replit/codemirror-lang-csharp": "^6.1.0",
     "@replit/codemirror-lang-svelte": "^6.0.0",
+    "@snipswap/schema": "workspace:^",
+    "@snipswap/surreal": "workspace:^",
     "@unocss/extractor-svelte": "^0.52.7",
     "cm6-theme-nord": "^0.2.0",
     "codemirror": "^6.0.1",

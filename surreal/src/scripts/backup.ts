@@ -1,7 +1,6 @@
-import fs from 'fs';
-import path from 'path';
 import { exec } from 'child_process';
 import { config } from 'dotenv';
+import path from 'path';
 config();
 
 const timestamp = new Date().toISOString();

@@ -1,7 +1,6 @@
-import { getLanguage, getSnippets } from '$lib/db/languages.js';
-import { getUser } from '$lib/db/users.js';
-import type { LanguageSchema } from '$lib/schema/language.js';
-import type { SnippetWithLatestComment } from '$lib/schema/snippet.js';
+import { getLanguage, getSnippets } from '$lib/data/languages.js';
+import { getUser } from '$lib/data/users.js';
+import type { LanguageSchema, SnippetWithLatestComment } from '@snipswap/schema';
 import type { UserSchema } from 'lucia-auth';
 
 export async function load({ locals: { auth, db }, url }) {

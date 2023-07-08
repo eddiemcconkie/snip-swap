@@ -1,6 +1,5 @@
-import { languageSchema } from '$lib/schema/language';
-import { snippetWithLatestComment } from '$lib/schema/snippet';
-import { SurQL, surql, type Surreal } from './surreal';
+import { languageSchema, snippetWithLatestComment } from '@snipswap/schema';
+import { SurQL, surql, type Surreal } from '@snipswap/surreal';
 
 export async function getLanguage(db: Surreal, languageId: string) {
   const [language] = await db.query(

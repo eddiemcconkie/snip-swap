@@ -1,7 +1,6 @@
-import { getCollections } from '$lib/db/collections.js';
-import { surql } from '$lib/db/surreal.js';
-import { languageSchema } from '$lib/schema/language.js';
-import { snippetSchema } from '$lib/schema/snippet.js';
+import { getCollections } from '$lib/data/collections.js';
+import { languageSchema, snippetSchema } from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import { error } from '@sveltejs/kit';
 import { z } from 'zod';
 
@@ -12,25 +11,25 @@ export async function load({ locals: { auth, db }, url }) {
     const [[snippets, languageCounts], { collections }] = await Promise.all([
       db.query(
         surql`
-        SELECT * FROM (
-          SELECT ->saved->snippet AS snippets
+          SELECT * FROM (
+            SELECT ->saved->snippet AS snippets
+            FROM $auth
+            FETCH snippets, snippets.owner, snippets.collection, snippets.language
+          )[0].snippets
+          WHERE type::bool(${
+            language ? surql`language.id = type::thing('language', ${language})` : surql`true`
+          })
+          ;
+          
+          SELECT
+            ->saved->snippet.language AS language,
+            count(->saved->snippet.language)
           FROM $auth
-          FETCH snippets, snippets.owner, snippets.collection, snippets.language
-        )[0].snippets
-        WHERE type::bool(${
-          language ? surql`language.id = type::thing('language', ${language})` : surql`true`
-        })
-        ;
-        
-        SELECT
-          ->saved->snippet.language AS language,
-          count(->saved->snippet.language)
-        FROM $auth
-        SPLIT language
-        GROUP BY language
-        FETCH language
-        ;
-      `,
+          SPLIT language
+          GROUP BY language
+          FETCH language
+          ;
+        `,
         snippetSchema.array(),
         z
           .object({

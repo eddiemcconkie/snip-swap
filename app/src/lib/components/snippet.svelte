@@ -3,9 +3,7 @@
   import { page } from '$app/stores';
   import { space } from '$lib/helpers/css-vars';
   import { formatSince } from '$lib/helpers/since';
-  import type { CollectionSchema } from '$lib/schema/collection';
-  import type { SimpleComment } from '$lib/schema/commented';
-  import type { SnippetSchema } from '$lib/schema/snippet';
+  import type { CollectionSchema, SimpleComment, SnippetSchema } from '@snipswap/schema';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { createEventDispatcher } from 'svelte';
   import { fade, slide } from 'svelte/transition';

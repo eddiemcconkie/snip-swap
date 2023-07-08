@@ -1,7 +1,7 @@
-import { PUBLIC_SURREAL_DB, PUBLIC_SURREAL_HOST, PUBLIC_SURREAL_NS } from '$env/static/public';
+import axios, { AxiosInstance } from 'axios';
 import type { z } from 'zod';
 
-type RestResponse<T> =
+type RestResponse<T = unknown> =
   | {
       status: 'OK';
       result: T;
@@ -48,26 +48,21 @@ type SchemaResults<TSchemas extends z.ZodTypeAny[]> = {
   [Index in keyof TSchemas]: Response<z.infer<TSchemas[Index]>>;
 };
 
-// type SurQL = {
-//   query: string;
-//   params: Record<string, string>;
-// };
 export class SurQL {
-  private brand = 'SurQL';
   constructor(readonly query: string, readonly params: Record<string, string>) {}
 }
 
 export function surql(strings: TemplateStringsArray, ...args: unknown[]): SurQL {
-  let query = strings[0];
+  let query = strings[0]!;
   let params: Record<string, string> = {};
   args.forEach((value, i) => {
     if (value instanceof SurQL) {
-      query = query.concat(value.query, strings[i + 1]);
+      query = query.concat(value.query, strings[i + 1]!);
       params = { ...params, ...value.params };
     } else {
       const id = crypto.randomUUID().replaceAll('-', '').slice(0, 6);
       const paramName = `_${id}`;
-      query = query.concat('$', paramName, strings[i + 1]);
+      query = query.concat('$', paramName, strings[i + 1]!);
       params[paramName] = JSON.stringify(value);
     }
   });
@@ -75,43 +70,31 @@ export function surql(strings: TemplateStringsArray, ...args: unknown[]): SurQL 
 }
 
 export class Surreal {
-  private authorization = '';
+  private instance: AxiosInstance;
 
-  constructor(auth: Auth) {
-    switch (auth.scope) {
-      case 'root':
-        this.authorization =
-          'Basic ' + Buffer.from(`${auth.username}:${auth.password}`, 'utf-8').toString('base64');
-        break;
-
-      case 'user':
-        this.authorization = `Bearer ${auth.token}`;
-        break;
-    }
+  constructor(auth: Auth, config: SurrealConfig) {
+    this.instance =
+      auth.scope === 'root'
+        ? rootInstance({
+            ...config,
+            username: auth.username,
+            password: auth.password,
+          })
+        : tokenInstance({
+            ...config,
+            token: auth.token,
+          });
   }
 
-  private async request(
-    sql: string,
-    params?: Record<string, string | number | boolean>,
-  ): Promise<RestResponse<unknown | null>[] | RestResponseError> {
-    const url = new URL(`${PUBLIC_SURREAL_HOST}/sql`);
-    if (params)
-      Object.entries(params).forEach(([param, value]) => {
-        url.searchParams.append(param, value.toString());
-      });
-
-    const response = await fetch(url, {
-      method: 'post',
+  private async request(sql: string, params?: Record<string, string | number | boolean>) {
+    const response = await this.instance.post<RestResponse[] | RestResponseError>('/sql', sql, {
       headers: {
-        NS: PUBLIC_SURREAL_NS,
-        DB: PUBLIC_SURREAL_DB,
         Accept: 'application/json',
         'Content-Type': 'text/plain',
-        Authorization: this.authorization,
       },
-      body: sql,
+      params,
     });
-    return await response.json();
+    return response.data;
   }
 
   /**
@@ -163,4 +146,86 @@ export class Surreal {
   }
 }
 
-export const connect = (token: string) => new Surreal({ scope: 'user', token });
+type TokenResponse =
+  | {
+      code: 200;
+      token: string;
+    }
+  | {
+      code: 403;
+    };
+
+type Signin =
+  | {
+      scope: 'user';
+      sessionId: string;
+    }
+  | {
+      scope: 'public';
+    }
+  | {
+      scope: 'extension';
+      apiKey: string;
+    };
+
+export async function signIn(signin: Signin, config: SurrealConfig) {
+  const instance = tokenInstance(config);
+  const { scope, ...params } = signin;
+
+  const response = await instance.post<TokenResponse>(
+    '/signin',
+    JSON.stringify({
+      NS: config.ns,
+      DB: config.db,
+      SC: scope,
+      ...params,
+    }),
+    {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+
+  const { data } = response;
+  return data.code === 200 ? data.token : null;
+}
+
+export type SurrealConfig = {
+  host: string;
+  ns: string;
+  db: string;
+};
+export type SurrealRootConfig = SurrealConfig & {
+  username: string;
+  password: string;
+};
+export type SurrealTokenConfig = SurrealConfig & {
+  token?: string;
+};
+
+export function rootInstance(config: SurrealRootConfig) {
+  return axios.create({
+    baseURL: config.host,
+    auth: {
+      username: config.username,
+      password: config.password,
+    },
+    headers: {
+      NS: config.ns,
+      DB: config.db,
+    },
+  });
+}
+
+export function tokenInstance(config: SurrealTokenConfig) {
+  return axios.create({
+    baseURL: config.host,
+    headers: {
+      NS: config.ns,
+      DB: config.db,
+      Authorization: config.token ? `Bearer ${config.token}` : undefined,
+    },
+  });
+}

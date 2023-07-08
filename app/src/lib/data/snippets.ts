@@ -1,6 +1,5 @@
-import { commentSchema } from '$lib/schema/commented';
-import { snippetSchema, userWithSnippets } from '$lib/schema/snippet';
-import { surql, type Surreal } from './surreal';
+import { commentSchema, snippetSchema, userWithSnippets } from '@snipswap/schema';
+import { surql, type Surreal } from '@snipswap/surreal';
 
 export async function getSnippet(db: Surreal, snippetId: string) {
   const [snippet] = await db.query(

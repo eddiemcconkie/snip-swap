@@ -7,7 +7,6 @@
   import ScrollContainer from '$lib/components/layout/scroll-container.svelte';
   import SuccessBanner from '$lib/components/success-banner.svelte';
   import { formatSince } from '$lib/helpers/since.js';
-  // import { actions:{save} } from '../snippet/[snippetId]/+page.server.js';
 
   export let data;
 

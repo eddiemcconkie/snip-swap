@@ -12,8 +12,8 @@
   import Snippet from '$lib/components/snippet.svelte';
   import { setPageAction } from '$lib/context/page-action.js';
   import { space } from '$lib/helpers/css-vars.js';
-  import { languages as allLanguages } from '$lib/schema/language.js';
   import { debounceSearch } from '$lib/stores/debounce-search.js';
+  import { languages as allLanguages } from '@snipswap/schema';
 
   export let data;
 

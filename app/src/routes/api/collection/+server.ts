@@ -1,4 +1,4 @@
-import { createCollection, getCollections } from '$lib/db/collections.js';
+import { createCollection, getCollections } from '$lib/data/collections.js';
 import type { Get } from '$lib/fetch/get';
 import { parseBody, type Post } from '$lib/fetch/post';
 import { error, json } from '@sveltejs/kit';
@@ -40,6 +40,9 @@ export async function POST(event) {
   if (!collection.ok) {
     throw error(500, collection.error);
   }
+  if (collection.count !== 1) {
+    throw error(500, 'could not create collection');
+  }
 
-  return json({ collection: collection.result } satisfies Post<typeof event>);
+  return json({ collection: collection.result[0] } satisfies Post<typeof event>);
 }

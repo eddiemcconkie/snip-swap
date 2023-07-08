@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": ".."
+    },
+    {
+      "path": "../app"
+    },
+    {
+      "path": "../extension"
+    },
+    {
+      "path": "../theme"
+    },
+    {
+      "path": "../surreal"
+    },
+    {
+      "path": "../schema"
+    }
+  ],
+  "settings": {}
+}

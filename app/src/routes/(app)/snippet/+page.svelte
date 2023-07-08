@@ -12,7 +12,7 @@
     SelectTrigger,
     type Selected,
   } from '$lib/components/select';
-  import { languages } from '$lib/schema/language.js';
+  import { languages } from '@snipswap/schema';
   import { superForm } from 'sveltekit-superforms/client';
 
   export let data;

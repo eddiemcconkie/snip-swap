@@ -1,4 +1,4 @@
-import { getCollectionSnippets } from '$lib/db/collections.js';
+import { getCollectionSnippets } from '$lib/data/collections.js';
 import type { Get } from '$lib/fetch/get.js';
 import { error, json } from '@sveltejs/kit';
 

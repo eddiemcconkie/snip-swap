@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SimpleComment } from '$lib/schema/commented';
+  import type { SimpleComment } from '@snipswap/schema';
   import { Modal, ModalContent, ModalHeader } from '../modal';
   import { getModalContext } from '../modal/context';
   import CommentInput from './comment-input.svelte';

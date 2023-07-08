@@ -4,12 +4,15 @@ import {
   getCollection,
   getCollectionByName,
   removeSnippetFromCollection,
-} from '$lib/db/collections.js';
-import { addCommentToSnippet, getSnippet } from '$lib/db/snippets.js';
-import { surql } from '$lib/db/surreal.js';
-import { collectionSchema, type CollectionSchema } from '$lib/schema/collection.js';
-import { commentSchema } from '$lib/schema/commented.js';
-import { savedSchema } from '$lib/schema/saved.js';
+} from '$lib/data/collections.js';
+import { addCommentToSnippet, getSnippet } from '$lib/data/snippets.js';
+import {
+  collectionSchema,
+  commentSchema,
+  savedSchema,
+  type CollectionSchema,
+} from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import { error, fail } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';

@@ -18,7 +18,7 @@ export async function GET({ cookies, url, locals }) {
       if (existingUser) return existingUser;
       return await createUser({
         username: providerUser.login,
-        name: providerUser.name,
+        name: providerUser.name ?? providerUser.login,
         avatar: providerUser.avatar_url,
       });
     };

@@ -2,7 +2,7 @@
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { space } from '$lib/helpers/css-vars';
-  import type { SimpleComment } from '$lib/schema/commented';
+  import type { SimpleComment } from '@snipswap/schema';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { createEventDispatcher } from 'svelte';
   import Avatar from '../avatar.svelte';

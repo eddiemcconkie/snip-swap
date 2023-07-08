@@ -1,7 +1,6 @@
-import { surql } from '$lib/db/surreal.js';
 import type { Get } from '$lib/fetch/get.js';
-import { userSchema } from '$lib/schema/auth.js';
-import { languageSchema } from '$lib/schema/language.js';
+import { languageSchema, userSchema } from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import { error, json } from '@sveltejs/kit';
 import { z } from 'zod';
 

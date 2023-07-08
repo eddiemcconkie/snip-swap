@@ -2,11 +2,6 @@ import { get, type Get } from '$lib/fetch/get';
 import type { RequestEvent } from '@sveltejs/kit';
 import { derived, writable, type Writable } from 'svelte/store';
 
-// type Loadable<T> = {
-//   data: T | null;
-//   loading: boolean;
-//   error: string | null;
-// };
 type Loadable<T> =
   | {
       loading: true;

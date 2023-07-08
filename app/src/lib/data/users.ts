@@ -1,6 +1,5 @@
-import { userSchema } from '$lib/schema/auth';
-import { snippetWithLatestComment } from '$lib/schema/snippet';
-import { surql, type Surreal } from './surreal';
+import { snippetWithLatestComment, userSchema } from '@snipswap/schema';
+import { surql, type Surreal } from '@snipswap/surreal';
 
 export async function getUser(db: Surreal, userId: string) {
   const [user] = await db.query(

@@ -8,7 +8,7 @@
     ModalHeader,
   } from '$lib/components/modal';
   import { get } from '$lib/fetch/get';
-  import type { CollectionSchema } from '$lib/schema/collection';
+  import type { CollectionSchema } from '@snipswap/schema';
   import type { SubmitFunction } from '@sveltejs/kit';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';

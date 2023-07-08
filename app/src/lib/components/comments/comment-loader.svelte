@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/environment';
   import { get } from '$lib/fetch/get';
-  import type { SimpleComment } from '$lib/schema/commented';
+  import type { SimpleComment } from '@snipswap/schema';
   import { flip } from 'svelte/animate';
   import { slide } from 'svelte/transition';
   import ErrorBanner from '../error-banner.svelte';

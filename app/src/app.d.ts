@@ -1,6 +1,6 @@
 /// <reference types="lucia-auth" />
 
-import type { Surreal } from '$lib/db/surreal';
+import type { Surreal } from '@snipswap/surreal';
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces

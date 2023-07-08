@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { db } from './surreal-rest.mjs';
+import { db } from './surreal-rest';
 
 const args = process.argv.slice(2);
 const fileOrFolder = path.resolve('db', 'schema', args[0]);

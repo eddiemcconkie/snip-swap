@@ -1,4 +1,4 @@
-import { getSnippetComments } from '$lib/db/snippets';
+import { getSnippetComments } from '$lib/data/snippets';
 import type { Get } from '$lib/fetch/get.js';
 import { error, json } from '@sveltejs/kit';
 

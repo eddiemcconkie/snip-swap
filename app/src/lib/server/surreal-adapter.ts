@@ -1,9 +1,8 @@
-import { surql } from '$lib/db/surreal';
-import { keySchema, sessionSchema, userSchema } from '$lib/schema/auth';
-import { addTable } from '$lib/schema/id';
+import { connectRoot } from '$lib/surreal.server';
+import { addTable, keySchema, sessionSchema, userSchema } from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import type { Adapter, LuciaErrorConstructor } from 'lucia-auth';
 import { z } from 'zod';
-import { connectRoot } from '../db/surreal.server';
 
 export const surrealdb =
   () =>

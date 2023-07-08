@@ -1,7 +1,7 @@
 <script lang="ts">
   import { space } from '$lib/helpers/css-vars';
   import { formatSince } from '$lib/helpers/since';
-  import type { CommentSchema } from '$lib/schema/commented';
+  import type { CommentSchema } from '@snipswap/schema';
   import Avatar from '../avatar.svelte';
 
   export let comment: CommentSchema;

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resize } from '$lib/helpers/image';
-  import type { UserSchema } from '$lib/schema/auth';
+  import type { UserSchema } from '@snipswap/schema';
 
   export let user: UserSchema;
 

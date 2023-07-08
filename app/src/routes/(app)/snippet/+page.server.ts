@@ -1,7 +1,5 @@
-import { surql } from '$lib/db/surreal.js';
-import { record } from '$lib/schema/id.js';
-import { postedSchema } from '$lib/schema/posted.js';
-import { snippetSchema } from '$lib/schema/snippet.js';
+import { postedSchema, record, snippetSchema } from '@snipswap/schema';
+import { surql } from '@snipswap/surreal';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';

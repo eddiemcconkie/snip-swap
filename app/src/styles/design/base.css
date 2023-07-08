@@ -75,7 +75,7 @@ an input gets paired with an icon
   }
 }
 
-code {
+:not(pre) > code {
   display: inline-block;
   background-color: hsl(0 0% 0% / 30%);
   padding-inline: 1ch;

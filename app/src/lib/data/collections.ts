@@ -1,9 +1,6 @@
-import { collectionSchema } from '$lib/schema/collection';
-import { organizedSchema } from '$lib/schema/organized';
-import { savedSchema } from '$lib/schema/saved';
-import { snippetSchema } from '$lib/schema/snippet';
+import { collectionSchema, organizedSchema, savedSchema, snippetSchema } from '@snipswap/schema';
+import { surql, type Surreal } from '@snipswap/surreal';
 import { z } from 'zod';
-import { surql, type Surreal } from './surreal';
 
 export async function getCollections(db: Surreal) {
   const [collections] = await db.query(surql`SELECT * FROM collection`, collectionSchema.array());

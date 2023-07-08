@@ -28,7 +28,4 @@
     /* background: radial-gradient(farthest-corner at center, rgb(0 0 0 / 0.8), rgb(0 0 0 / 0.3)); */
     /* background: radial-gradient(farthest-corner at center, #111945, rgb(0 0 0 / 0.3)); */
   }
-  dialog > :global(form) {
-    /* display: contents; */
-  }
 </style>

@@ -1,6 +1,6 @@
-import { connect } from '$lib/db/surreal';
-import { getPublicToken, getUserToken } from '$lib/db/surreal.server';
 import { auth } from '$lib/server/lucia';
+import { connect } from '$lib/surreal';
+import { getPublicToken, getUserToken } from '$lib/surreal.server';
 import { error, type Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 
