@@ -100,7 +100,7 @@
           </Button>
         </li>
         <li>
-          <Button href="/">
+          <Button href="/extension">
             <span class="i-logos:visual-studio-code?mask" />
             extension
           </Button>

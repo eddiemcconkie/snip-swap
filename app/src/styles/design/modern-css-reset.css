@@ -22,8 +22,12 @@ ul[role='list'] {
 } */
 ol,
 ul {
-  list-style: none;
+  /* list-style: none; */
   margin: 0;
+  /* padding: 0; */
+}
+:is(ol, ul):not([role='list']) {
+  list-style: none;
   padding: 0;
 }
 html:focus-within {

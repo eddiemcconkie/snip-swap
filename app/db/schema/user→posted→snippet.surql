@@ -18,4 +18,3 @@ DEFINE FIELD out ON posted
 ;
 
 DEFINE INDEX unique_relation ON posted COLUMNS in, out UNIQUE;
-
