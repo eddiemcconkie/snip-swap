@@ -27,7 +27,7 @@ type Auth =
       password: string;
     }
   | {
-      scope: 'user';
+      scope: 'user' | 'extension';
       token: string;
     };
 
@@ -131,7 +131,7 @@ export class Surreal {
     ) as any;
   }
 
-  async queryDebug(...args: Parameters<typeof this.query>): ReturnType<typeof this.query> {
+  async queryDebug(...args: Parameters<Surreal['query']>): ReturnType<Surreal['query']> {
     const [surql, ...schemas] = args;
     console.group('DEBUG');
     for (const line of surql.query.split('\n')) {
