@@ -4,6 +4,7 @@ DEFINE TABLE collection SCHEMAFULL
       WHERE $scope = 'user'
     FOR select, update, delete
       WHERE owner = $auth
+        AND $scope != 'extension'
 ;
 
 DEFINE FIELD name ON collection  

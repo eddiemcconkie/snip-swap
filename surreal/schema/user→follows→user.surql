@@ -6,6 +6,7 @@ DEFINE TABLE follows SCHEMAFULL
       WHERE $scope = 'user'
     FOR update, delete
       WHERE in = $auth
+        AND $scope != 'extension'
 ;
 
 DEFINE FIELD in ON follows

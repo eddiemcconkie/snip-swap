@@ -4,8 +4,10 @@ DEFINE TABLE commented SCHEMAFULL
       FULL
     FOR create
       WHERE $scope = 'user'
+        AND $scope != 'extension'
     FOR update, delete
       WHERE in = $auth
+        AND $scope != 'extension'
 ;
 
 DEFINE FIELD in ON commented

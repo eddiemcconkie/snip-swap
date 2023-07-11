@@ -4,6 +4,7 @@ DEFINE TABLE api_key SCHEMAFULL
       NONE
     FOR select, delete
       WHERE user_id = $auth
+        AND $scope != 'extension'
 ;
 
 -- HASHED KEY

@@ -7,6 +7,7 @@ DEFINE TABLE snippet SCHEMAFULL
       WHERE $scope = 'user'
     FOR update, delete
       WHERE owner = $auth
+        AND $scope != 'extension'
 ;
 
 -- CODE
