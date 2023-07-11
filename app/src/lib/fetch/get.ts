@@ -62,8 +62,6 @@ type GetWithId<T extends GetRoute> = {
 };
 export type Get<T extends RequestEvent<any, GetRoute>> = GetWithId<T['route']['id']>;
 
-export async function parseSearchParameters<T extends RequestEvent<any, GetRoute>>(event: T) {}
-
 export async function get<T extends GetRoute>(
   route: T,
   params: {
@@ -80,5 +78,3 @@ export async function get<T extends GetRoute>(
   const response = await fetch(url);
   return (await response.json()) as GetWithId<typeof route>;
 }
-
-// const data = await get('/api/collection', { dude: '' });

@@ -1,27 +1,26 @@
 import { getLanguage, getSnippets } from '$lib/data/languages.js';
 import { getUser } from '$lib/data/users.js';
+import { parseSearchParameters } from '$lib/fetch/search';
 import type { LanguageSchema, SnippetWithLatestComment } from '@snipswap/schema';
 import type { UserSchema } from 'lucia-auth';
 
 export async function load({ locals: { auth, db }, url }) {
-  const languageSearch = url.searchParams.get('language');
-  const userSearch = url.searchParams.get('user');
-  const search = url.searchParams.get('q');
-
   const { user } = await auth.validateUser();
+
+  const search = parseSearchParameters(url, ['language', 'user', 'q']);
 
   let snippets: SnippetWithLatestComment[] = [];
 
   let queryLanguageData: LanguageSchema | null = null;
   let queryUserData: UserSchema | null = null;
 
-  if (languageSearch) {
+  if (search.language) {
     const [{ language: _language }, { snippets: _snippets }] = await Promise.all([
-      getLanguage(db, languageSearch),
+      getLanguage(db, search.language),
       getSnippets(db, {
         by: {
           type: 'language',
-          languageId: languageSearch,
+          languageId: search.language,
         },
       }),
     ]);
@@ -29,13 +28,13 @@ export async function load({ locals: { auth, db }, url }) {
       queryLanguageData = _language.result;
       snippets = _snippets.result;
     }
-  } else if (userSearch) {
+  } else if (search.user) {
     const [{ user: _user }, { snippets: _snippets }] = await Promise.all([
-      getUser(db, userSearch),
+      getUser(db, search.user),
       getSnippets(db, {
         by: {
           type: 'user',
-          userId: userSearch,
+          userId: search.user,
         },
       }),
     ]);
@@ -43,11 +42,11 @@ export async function load({ locals: { auth, db }, url }) {
       queryUserData = _user.result;
       snippets = _snippets.result;
     }
-  } else if (search) {
+  } else if (search.q) {
     const { snippets: _snippets } = await getSnippets(db, {
       by: {
         type: 'query',
-        query: search,
+        query: search.q,
       },
     });
     if (_snippets.ok) {

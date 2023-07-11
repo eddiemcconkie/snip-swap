@@ -1,9 +1,9 @@
+import { parseSearchParameters } from '$lib/fetch/search.js';
 import { auth, githubAuth } from '$lib/server/lucia.js';
 import { error, redirect } from '@sveltejs/kit';
 
 export async function GET({ cookies, url, locals }) {
-  const code = url.searchParams.get('code');
-  const state = url.searchParams.get('state');
+  const { code, state } = parseSearchParameters(url, ['code', 'state']);
 
   const storedState = cookies.get('github_oauth_state');
 
