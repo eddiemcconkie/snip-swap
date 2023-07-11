@@ -133,19 +133,11 @@
             <ul>
               {#each snippets as snippet}
                 <li>
-                  {snippet.code}
+                  <a href="/snippet/{snippet.id}">{snippet.code}</a>
                 </li>
               {/each}
             </ul>
           </SidebarSection>
-          <p class="mb-2xs"><strong>snippets</strong></p>
-          <ul class="step--1 mb-m">
-            {#each snippets as snippet}
-              <li>
-                {snippet.code}
-              </li>
-            {/each}
-          </ul>
         {/if}
       {:else}
         <ErrorBanner>{$searchResults.error}</ErrorBanner>

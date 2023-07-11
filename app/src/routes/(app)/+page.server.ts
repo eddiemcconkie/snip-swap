@@ -59,5 +59,5 @@ export async function load({ locals: { auth, db }, url }) {
     }
   }
 
-  return { user, snippets, queryLanguageData, queryUserData, search };
+  return { user, snippets, queryLanguageData, queryUserData, search: search.q };
 }
