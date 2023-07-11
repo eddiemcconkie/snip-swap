@@ -1,12 +1,5 @@
 <script lang="ts">
   import { enhance } from '$app/forms';
-  import {
-    Modal,
-    ModalCancelButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-  } from '$lib/components/modal';
   import { get } from '$lib/fetch/get';
   import type { CollectionSchema } from '@snipswap/schema';
   import type { SubmitFunction } from '@sveltejs/kit';
@@ -14,6 +7,7 @@
   import { slide } from 'svelte/transition';
   import Button from '../button.svelte';
   import Loading from '../loading.svelte';
+  import { Modal } from '../modal';
   import { getModalContext } from '../modal/context';
 
   export let snippetId: string;
@@ -94,14 +88,14 @@
 </script>
 
 <Modal>
-  <ModalHeader>
+  <Modal.Header>
     {#if currentCollection}
       switch collections
     {:else}
       add snippet to a collection
     {/if}
-  </ModalHeader>
-  <ModalContent>
+  </Modal.Header>
+  <Modal.Content>
     <form method="post" use:enhance={handleAddToCollection}>
       {#await collectionsResponse}
         <Loading delay={200} />
@@ -159,8 +153,8 @@
         <p>{error}</p>
       {/await}
     </form>
-  </ModalContent>
-  <ModalFooter>
+  </Modal.Content>
+  <Modal.Footer>
     <form method="post" use:enhance={handleRemoveCollection} class="display-contents">
       {#if currentCollection}
         <Button
@@ -171,10 +165,10 @@
           <i-heroicons:arrow-uturn-left-20-solid /> no collection
         </Button>
       {:else}
-        <ModalCancelButton />
+        <Modal.CancelButton />
       {/if}
     </form>
-  </ModalFooter>
+  </Modal.Footer>
   <!-- <ModalFooter>
       <ModalCancelButton />
       <ModalSubmitButton />

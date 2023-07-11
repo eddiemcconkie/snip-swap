@@ -1,4 +1,3 @@
-<!-- select-trigger.svelte -->
 <script>
   import Button from '../button.svelte';
   import { getSelectContext } from './context';
@@ -19,6 +18,10 @@
       }
     }}
   >
-    {$currentSelected?.label ?? placeholder}
+    {#if $currentSelected}
+      <slot selected={$currentSelected}>{$currentSelected.label}</slot>
+    {:else}
+      {placeholder}
+    {/if}
   </Button>
 </div>

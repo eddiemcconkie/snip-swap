@@ -1,6 +1,13 @@
-export { default as SelectDivider } from './select-divider.svelte';
-export { default as SelectOption } from './select-option.svelte';
-export { default as SelectTrigger } from './select-trigger.svelte';
-export { default as Select } from './select.svelte';
+import { componentGroup } from '$lib/helpers/component-group';
+import SelectDivider from './select-divider.svelte';
+import SelectOption from './select-option.svelte';
+import SelectTrigger from './select-trigger.svelte';
+import Select_ from './select.svelte';
+
+export const Select = componentGroup(Select_, {
+  Divider: SelectDivider,
+  Option: SelectOption,
+  Trigger: SelectTrigger,
+});
 
 export type Selected = { value: string; label: string } | null;

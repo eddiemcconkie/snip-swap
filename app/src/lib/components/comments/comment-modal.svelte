@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { SimpleComment } from '@snipswap/schema';
-  import { Modal, ModalContent, ModalHeader } from '../modal';
+  import { Modal } from '../modal';
   import { getModalContext } from '../modal/context';
   import CommentInput from './comment-input.svelte';
   import CommentLoader from './comment-loader.svelte';
@@ -15,7 +15,7 @@
 </script>
 
 <Modal>
-  <ModalHeader>
+  <Modal.Header>
     <a
       href="/snippet/{snippetId}"
       on:click={() => {
@@ -24,8 +24,8 @@
     >
       go to snippet
     </a>
-  </ModalHeader>
-  <ModalContent>
+  </Modal.Header>
+  <Modal.Content>
     <CommentInput
       {snippetId}
       on:comment={({ detail: newComment }) => {
@@ -34,6 +34,6 @@
       }}
     />
     <CommentLoader {snippetId} bind:newComments />
-  </ModalContent>
+  </Modal.Content>
   <!-- <ModalFooter /> -->
 </Modal>
