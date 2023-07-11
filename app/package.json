@@ -11,11 +11,7 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check .",
-    "format": "prettier --plugin-search-dir . --write .",
-    "db:import-all": "node ./db/scripts/import.mjs . -r",
-    "db:import": "node ./db/scripts/import.mjs",
-    "db:backup": "node ./db/scripts/backup.mjs",
-    "db:restore": "node ./db/scripts/restore.mjs"
+    "format": "prettier --plugin-search-dir . --write ."
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.1.11",

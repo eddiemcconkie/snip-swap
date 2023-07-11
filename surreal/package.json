@@ -7,9 +7,13 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --sourcemap",
-    "build:scripts": "",
+    "build:scripts": "tsup --entry src/scripts/backup.ts --entry src/scripts/import.ts --entry src/scripts/restore.ts --outDir scripts --format esm",
     "watch": "pnpm build --watch",
-    "watch:scripts": ""
+    "watch:scripts": "pnpm build:scripts --watch",
+    "import-all": "node ./scripts/import.mjs . -r",
+    "import": "node ./scripts/import.mjs",
+    "backup": "node ./scripts/backup.mjs",
+    "restore": "node ./scripts/restore.mjs"
   },
   "keywords": [],
   "author": "Eddie McConkie",

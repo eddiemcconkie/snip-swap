@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import type { z } from 'zod';
 
-type RestResponse<T = unknown> =
+export type RestResponse<T = unknown> =
   | {
       status: 'OK';
       result: T;

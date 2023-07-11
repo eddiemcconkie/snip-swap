@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'app/**'
+      - 'surreal/**'
+      - 'schema/**'
   workflow_dispatch:
 
 jobs:
@@ -30,7 +32,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./app
+        working-directory: ./surreal
+
+      - name: Build Surreal scripts
+        run: pnpm build:scripts
 
       - name: Run script
         env:
@@ -39,8 +44,8 @@ jobs:
           PUBLIC_SURREAL_DB: ${{ secrets.PUBLIC_SURREAL_DB }}
           SURREAL_USER: ${{ secrets.SURREAL_USER }}
           SURREAL_PASS: ${{ secrets.SURREAL_PASS }}
-        run: pnpm run db:import-all
-        working-directory: ./app
+        run: pnpm import-all
+        working-directory: ./surreal
 
       - name: Cleanup
         if: failure()

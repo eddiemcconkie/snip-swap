@@ -5,7 +5,7 @@ config();
 
 const timestamp = new Date().toISOString();
 
-const file = path.resolve('db', 'backups', `${timestamp}.surql`);
+const file = path.resolve('backups', `${timestamp}.surql`);
 
 const { PUBLIC_SURREAL_HOST, SURREAL_USER, SURREAL_PASS, PUBLIC_SURREAL_NS, PUBLIC_SURREAL_DB } =
   process.env;
