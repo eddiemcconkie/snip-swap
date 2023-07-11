@@ -75,12 +75,7 @@
   </svelte:fragment>
 
   <svelte:fragment slot="sidebar">
-    <form
-      method="get"
-      on:submit={() => {
-        sidebarOpen = false;
-      }}
-    >
+    <form method="get">
       <div class="flex align-center bg-surface-3 radius-round pl-2xs mb-s | focus-parent">
         <input
           type="text"

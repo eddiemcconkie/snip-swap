@@ -1,7 +1,12 @@
 <script lang="ts">
+  import { afterNavigate } from '$app/navigation';
   import Button from '../button.svelte';
 
   export let sidebarOpen = false;
+
+  afterNavigate(() => {
+    sidebarOpen = false;
+  });
 </script>
 
 <svelte:window

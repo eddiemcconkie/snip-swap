@@ -1,6 +1,8 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { afterNavigate } from '$app/navigation';
+  import { navigating, page } from '$app/stores';
   import Button from '$lib/components/button.svelte';
+  import Loading from '$lib/components/loading.svelte';
   import { createPageActionContext } from '$lib/context/page-action';
   import { resize } from '$lib/helpers/image';
   import { slide } from 'svelte/transition';
@@ -13,6 +15,10 @@
     { text: 'saved', path: '/saved' },
     { text: 'new snippet', path: '/snippet' },
   ] as const;
+
+  afterNavigate(() => {
+    menuOpen = false;
+  });
 
   /**
    * Pages can optionally define a callback function for when the page action button
@@ -28,8 +34,12 @@
 />
 
 <div class="layout | full-height">
-  <!-- <header class="header | bg-surface-1 pt-2xs pb-xs"> -->
   <header class="header | bg-surface-1 p-3xs">
+    <div class="px-xs">
+      {#if $navigating}
+        <Loading delay={500} />
+      {/if}
+    </div>
     <img src={logoFull} alt="snipswap" />
     <div class="screen:s">
       <Button
@@ -162,10 +172,13 @@
     border-block-end: var(--border-dark);
   }
   /* Logo in center and menu button on right */
-  .header > :first-child {
+  /* .header > :first-child {
     grid-column: 2;
+  } */
+  .header > :first-child {
+    justify-self: start;
   }
-  .header > :nth-child(2) {
+  .header > :last-child {
     justify-self: end;
   }
 
