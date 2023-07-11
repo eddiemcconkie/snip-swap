@@ -66,7 +66,6 @@ async function writeSnippetsToFile(snippets: SnippetSchema[], context: vscode.Ex
     };
   }
 
-  // console.log(fileData);
   const path = getSnippetsUri(context);
   vscode.workspace.fs.writeFile(path, encode(JSON.stringify(fileData, null, 2))).then(() => {
     vscode.window.showInformationMessage('Your snippets have been updated! You may need to reload');

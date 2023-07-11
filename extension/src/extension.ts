@@ -25,8 +25,11 @@ export function activate(context: vscode.ExtensionContext) {
 
   const path = getSnippetsUri(context);
   vscode.workspace.fs.readFile(path).then(
-    () => {},
     () => {
+      // File exists!
+    },
+    () => {
+      // Create the snippet file
       vscode.workspace.fs.writeFile(path, encode(''));
     },
   );
