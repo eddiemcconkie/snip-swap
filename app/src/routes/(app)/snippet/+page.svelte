@@ -5,13 +5,7 @@
   import EditableCodeBlock from '$lib/components/code/editable-code-block.svelte';
   import LanguageIcon from '$lib/components/language-icon.svelte';
   import ScrollContainer from '$lib/components/layout/scroll-container.svelte';
-  import {
-    Select,
-    SelectDivider,
-    SelectOption,
-    SelectTrigger,
-    type Selected,
-  } from '$lib/components/select';
+  import { Select, type Selected } from '$lib/components/select/index.js';
   import { languages } from '@snipswap/schema';
   import { superForm } from 'sveltekit-superforms/client';
 
@@ -55,18 +49,23 @@
         <div class="flex align-center gap-2xs">
           <label for="language">language</label>
           <Select name="language" id="language" on:select={onSelectLanguage}>
-            <SelectDivider>recently used</SelectDivider>
-            <SelectDivider>languages</SelectDivider>
+            <Select.Divider>recently used</Select.Divider>
+            <Select.Divider>languages</Select.Divider>
             {#each languages as language}
-              <SelectOption
+              <Select.Option
                 label={language.name}
                 value={language.id}
                 selected={language.id === selectedLanguage}
               >
                 <LanguageIcon language={language.id} slot="icon" />
-              </SelectOption>
+              </Select.Option>
             {/each}
-            <SelectTrigger slot="trigger" />
+            <svelte:fragment slot="trigger">
+              <Select.Trigger let:selected>
+                <LanguageIcon language={selected?.value ?? ''} />
+                <span>{selected?.label}</span>
+              </Select.Trigger>
+            </svelte:fragment>
           </Select>
         </div>
         <div>
@@ -76,7 +75,6 @@
       </div>
       <div>
         <label for="code">write some code</label>
-        <!-- <textarea name="code" id="code" bind:value={$form.code} /> -->
         <EditableCodeBlock bind:language={selectedLanguage} startWith={$form.code} />
       </div>
       <div>
