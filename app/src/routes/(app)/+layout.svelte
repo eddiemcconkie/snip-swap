@@ -4,7 +4,7 @@
   import { createPageActionContext } from '$lib/context/page-action';
   import { resize } from '$lib/helpers/image';
   import { slide } from 'svelte/transition';
-  import logoSmall from '/src/assets/logo-small.svg';
+  import logoFull from '/src/assets/logo-full.svg';
 
   let menuOpen = false;
 
@@ -30,7 +30,7 @@
 <div class="layout | full-height">
   <!-- <header class="header | bg-surface-1 pt-2xs pb-xs"> -->
   <header class="header | bg-surface-1 p-3xs">
-    <img src={logoSmall} alt="snipswap" />
+    <img src={logoFull} alt="snipswap" />
     <div class="screen:s">
       <Button
         style="ghost"
