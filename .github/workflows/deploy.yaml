@@ -1,4 +1,4 @@
-name: Migrate SurrealDB
+name: Deploy app
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
       - 'app/**'
       - 'surreal/**'
       - 'schema/**'
+      - '.github/workflows/deploy.yaml'
   workflow_dispatch:
 
 jobs:
