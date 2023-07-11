@@ -36,6 +36,7 @@ jobs:
 
       - name: Build Surreal scripts
         run: pnpm build:scripts
+        working-directory: ./surreal
 
       - name: Run script
         env:
