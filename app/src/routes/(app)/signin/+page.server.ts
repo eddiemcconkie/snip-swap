@@ -2,8 +2,10 @@ import { githubAuth } from '$lib/server/lucia.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function load({ locals }) {
-  const { session } = await locals.auth.validateUser();
-  if (session) throw redirect(302, '/');
+  const { user } = await locals.auth.validateUser();
+  if (user) throw redirect(302, '/');
+
+  return { user };
 }
 
 export const actions = {
